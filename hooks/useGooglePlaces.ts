@@ -25,15 +25,20 @@ export interface AddressData {
 
 export function useGooglePlaces(
   inputRef: React.RefObject<HTMLInputElement>,
-  onAddressSelect: (addressData: AddressData) => void
+  onAddressSelect: (addressData: AddressData) => void,
+  readOnly?: boolean
 ) {
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const sessionTokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(null);
 
   useEffect(() => {
-    // Wait for both input ref and Google Maps to be available
-    if (!inputRef.current || !window.google?.maps?.places) {
-      console.log('Waiting for dependencies...');
+    // If readOnly is true, or dependencies are not ready, do not initialize
+    if (readOnly || !inputRef.current || !window.google?.maps?.places) {
+      if (readOnly) {
+        console.log('Google Places Autocomplete skipped due to readOnly mode.');
+      } else {
+        console.log('Waiting for dependencies for Google Places Autocomplete...');
+      }
       return;
     }
 
@@ -91,5 +96,5 @@ export function useGooglePlaces(
     } catch (error) {
       console.error('Error initializing Places Autocomplete:', error);
     }
-  }, [inputRef, onAddressSelect]);
+  }, [inputRef, onAddressSelect, readOnly]);
 } 

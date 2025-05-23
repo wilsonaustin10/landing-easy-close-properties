@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ThumbsUp, ThumbsDown, Phone } from 'lucide-react';
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
 import { useForm } from '../../context/FormContext';
 import { trackEvent } from '../../utils/analytics';
 import Link from 'next/link';
@@ -77,7 +77,7 @@ export default function PropertyListedPage() {
             <p className="text-center text-gray-600 leading-relaxed">
               Life is hard enough without having to worry about trying to sell your home. 
               We do everything possible to make selling your home as convenient and stress-free as possible. 
-              After you've completed the form above, we'll give you a call to determine the best solution for your situation.
+              After you&apos;ve completed the form above, we&apos;ll give you a call to determine the best solution for your situation.
             </p>
           </div>
         </div>

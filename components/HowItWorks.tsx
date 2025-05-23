@@ -53,7 +53,15 @@ export function HowItWorks() {
 
         <div className="mt-12 bg-white p-6 rounded-lg shadow-sm">
           <p className="text-center text-gray-700">
-            <span className="font-semibold">Timeframe:</span> Once we get your information, we're usually able to make you a fair all-cash offer within 24 hours. From there, we can close as quickly as 7 days… or on your schedule.
+            <span className="font-semibold">Timeframe:</span> Once we get your information, we&apos;re usually able to make you a fair all-cash offer within 24 hours. From there, we can close as quickly as 7 days… or on your schedule.
+          </p>
+        </div>
+
+        <div className="mt-12 bg-white p-6 rounded-lg shadow-sm">
+          <p className="text-lg text-gray-600">
+            No repairs, no cleaning, no showings. Just a straightforward sale so you can move on.
+            We handle all the paperwork and complexities, ensuring a smooth and stress-free transaction from start to finish.
+            You won&apos;t have to worry about a thing.
           </p>
         </div>
       </div>

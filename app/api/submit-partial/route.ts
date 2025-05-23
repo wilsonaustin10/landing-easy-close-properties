@@ -131,7 +131,7 @@ export async function POST(request: Request) {
 
     // Send to Zapier webhook
     try {
-      const result = await sendToZapier(leadData);
+      await sendToZapier(leadData);
       console.log('Successfully sent to Zapier webhook');
       
       return NextResponse.json({ 

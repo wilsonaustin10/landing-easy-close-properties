@@ -1,8 +1,8 @@
 import React from 'react';
 import PropertyForm from '../components/PropertyForm';
 import Testimonials from '../components/Testimonials';
-import TrustBadges from '../components/TrustBadges';  // Kept for future use
-import { CheckCircle } from 'lucide-react';
+// import TrustBadges from '../components/TrustBadges';  // Kept for future use
+// import { CheckCircle } from 'lucide-react';
 import { Benefits } from '../components/Benefits';
 import { HowItWorks } from '../components/HowItWorks';
 

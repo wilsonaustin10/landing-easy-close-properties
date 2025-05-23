@@ -139,7 +139,7 @@ export async function POST(request: Request) {
 
     // 4. Send to Zapier webhook
     try {
-      const result = await sendToZapier(formData);
+      await sendToZapier(formData);
       console.log('Successfully sent to Zapier webhook');
       
       return NextResponse.json({ 

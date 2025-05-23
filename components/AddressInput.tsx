@@ -22,24 +22,20 @@ export default function AddressInput({
   readOnly = false
 }: AddressInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState<AddressData | null>(null);
   const [localError, setLocalError] = useState<string>('');
   const { formState, updateFormData, errors } = useForm();
 
-  // Handle Google Places selection
   const handleAddressSelect = async (addressData: AddressData) => {
     setIsProcessing(true);
     
     try {
-      // Ensure all required fields are present
       if (!addressData.streetNumber || !addressData.street || !addressData.city || 
           !addressData.state || !addressData.postalCode || !addressData.placeId) {
         throw new Error('Incomplete address selected. Please select a full address.');
       }
 
-      // Update form data with all address components
       const addressUpdate = {
         address: addressData.formattedAddress,
         streetAddress: `${addressData.streetNumber} ${addressData.street}`.trim(),
@@ -63,10 +59,7 @@ export default function AddressInput({
     }
   };
 
-  // Only initialize Google Places if not readOnly
-  if (!readOnly) {
-    useGooglePlaces(inputRef, handleAddressSelect);
-  }
+  useGooglePlaces(inputRef, handleAddressSelect, readOnly);
 
   const error = externalError || localError || errors?.address;
 
@@ -85,7 +78,7 @@ export default function AddressInput({
             className={`w-full px-4 py-3 text-lg border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all
               ${error ? 'border-red-500' : 'border-gray-300'}`}
             defaultValue={defaultValue || formState.address}
-            disabled={isLoading || isProcessing}
+            disabled={isProcessing}
             aria-label="Property address"
             aria-invalid={Boolean(error)}
             aria-describedby={error ? 'address-error' : undefined}
@@ -93,7 +86,7 @@ export default function AddressInput({
           />
         )}
         
-        {(isLoading || isProcessing) && !readOnly && (
+        {isProcessing && !readOnly && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
             <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
           </div>

@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
             <section>
               <h2 className="text-xl font-semibold mb-3 text-gray-800">1. Introduction</h2>
               <p>
-                Easy Close Properties> ("we," "our," or "us") respects your privacy and is committed to protecting 
+                Easy Close Properties (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) respects your privacy and is committed to protecting 
                 it through our compliance with this policy. This policy describes the types of information we 
                 may collect from you or that you may provide when you visit our website and our practices for 
                 collecting, using, maintaining, protecting, and disclosing that information.
@@ -98,7 +98,7 @@ export default function PrivacyPolicy() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold mb-3 text-gray-800">8. Children's Privacy</h2>
+              <h2 className="text-xl font-semibold mb-3 text-gray-800">8. Children&apos;s Privacy</h2>
               <p>
                 Our website is not intended for children under 13 years of age. We do not knowingly collect 
                 personal information from children under 13.
@@ -118,7 +118,7 @@ export default function PrivacyPolicy() {
               <h2 className="text-xl font-semibold mb-3 text-gray-800">10. Changes to Our Privacy Policy</h2>
               <p>
                 It is our policy to post any changes we make to our privacy policy on this page. If we make 
-                material changes to how we treat our users' personal information, we will notify you through 
+                material changes to how we treat our users&apos; personal information, we will notify you through 
                 a notice on the website home page.
               </p>
             </section>

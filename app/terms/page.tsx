@@ -12,7 +12,7 @@ export default function TermsOfService() {
             <section>
               <h2 className="text-xl font-semibold mb-3 text-gray-800">1. Acceptance of Terms</h2>
               <p>
-                By accessing or using the website of Easy Close Properties ("Company," "we," "us," or "our"), you agree to comply 
+                By accessing or using the website of Easy Close Properties (&quot;Company,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), you agree to comply 
                 with and be bound by these Terms of Service. If you do not agree to these terms, please do not use our website.
               </p>
             </section>
@@ -21,7 +21,7 @@ export default function TermsOfService() {
               <h2 className="text-xl font-semibold mb-3 text-gray-800">2. Changes to Terms</h2>
               <p>
                 We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is 
-                material, we will try to provide at least 30 days' notice prior to any new terms taking effect. What constitutes 
+                material, we will try to provide at least 30 days&apos; notice prior to any new terms taking effect. What constitutes 
                 a material change will be determined at our sole discretion.
               </p>
             </section>
@@ -104,7 +104,7 @@ export default function TermsOfService() {
               <p>
                 You agree to defend, indemnify, and hold harmless Easy Close Properties and its licensees and licensors, and their 
                 employees, contractors, agents, officers, and directors, from and against any and all claims, damages, obligations, 
-                losses, liabilities, costs or debt, and expenses (including but not limited to attorney's fees).
+                losses, liabilities, costs or debt, and expenses (including but not limited to attorney&apos;s fees).
               </p>
             </section>
 

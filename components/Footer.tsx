@@ -1,38 +1,38 @@
 import React from 'react';
 import Link from 'next/link';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Mail, Phone } from 'lucide-react';
 import Image from 'next/image';
 
 export default function Footer() {
   return (
-    <footer className="bg-footer-bg text-footer-text">
+    <footer className="bg-primary text-white">
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center">
               <Image
-                src="/https:&#x2F;&#x2F;firebasestorage.googleapis.com&#x2F;v0&#x2F;b&#x2F;allied-advantage-automation.firebasestorage.app&#x2F;o&#x2F;logos%2F1747858909058-iunouh%2FLogo.png?alt&#x3D;media&amp;token&#x3D;96beae9e-9757-4ce8-bc23-a841b0e8bed4"
+                src="/ECPLogo.png"
                 alt="Easy Close Properties"
-                width={120}
-                height={120}
+                width={100}
+                height={26}
                 className="mr-2"
               />
             </div>
-            <p className="text-footer-text/90">
+            <p className="text-white/90">
               We buy houses in any condition. Get your fair cash offer today.
             </p>
             <div className="space-y-2">
               <a 
                 href="tel: TBA"
-                className="flex items-center space-x-2 text-footer-text/80 hover:text-footer-hover transition-colors"
+                className="flex items-center space-x-2 text-white/80 hover:text-red-400 transition-colors"
               >
                 <Phone className="h-4 w-4" />
                 <span>TBA</span>
               </a>
               <a 
                 href="mailto:TBA@TBA.com"
-                className="flex items-center space-x-2 text-footer-text/80 hover:text-footer-hover transition-colors"
+                className="flex items-center space-x-2 text-white/80 hover:text-red-400 transition-colors"
               >
                 <Mail className="h-4 w-4" />
                 <span>TBA@TBA.com</span>
@@ -45,17 +45,17 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/#how-it-works" className="text-footer-text/80 hover:text-footer-hover transition-colors">
+                <Link href="/#how-it-works" className="text-white/80 hover:text-red-400 transition-colors">
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-footer-text/80 hover:text-footer-hover transition-colors">
+                <Link href="/about" className="text-white/80 hover:text-red-400 transition-colors">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/#testimonials" className="text-footer-text/80 hover:text-footer-hover transition-colors">
+                <Link href="/#testimonials" className="text-white/80 hover:text-red-400 transition-colors">
                   Testimonials
                 </Link>
               </li>
@@ -66,19 +66,19 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Specializing In</h3>
             <ul className="space-y-2">
-              <li className="text-footer-text/80">Pre-Foreclosure</li>
-              <li className="text-footer-text/80">Divorce</li>
-              <li className="text-footer-text/80">Storm Damage</li>
-              <li className="text-footer-text/80">Tax Liens</li>
-              <li className="text-footer-text/80">Bad Tenants</li>
-              <li className="text-footer-text/80">Code Violations</li>
+              <li className="text-white/80">Pre-Foreclosure</li>
+              <li className="text-white/80">Divorce</li>
+              <li className="text-white/80">Storm Damage</li>
+              <li className="text-white/80">Tax Liens</li>
+              <li className="text-white/80">Bad Tenants</li>
+              <li className="text-white/80">Code Violations</li>
             </ul>
           </div>
 
           {/* Get Started */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Get Started</h3>
-            <p className="text-footer-text/90 mb-4">
+            <p className="text-white/90 mb-4">
               Ready to sell your house? Get your cash offer today!
             </p>
             <Link
@@ -90,13 +90,13 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-footer-text/20 text-center text-footer-text/80">
+        <div className="mt-12 pt-8 border-t border-white/20 text-center text-white/80">
           <p>© {new Date().getFullYear()} Easy Close Properties. All rights reserved.</p>
           <div className="mt-2 space-x-4">
-            <Link href="/privacy" className="hover:text-footer-hover transition-colors">
+            <Link href="/privacy" className="hover:text-red-400 transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="hover:text-footer-hover transition-colors">
+            <Link href="/terms" className="hover:text-red-400 transition-colors">
               Terms of Service
             </Link>
           </div>

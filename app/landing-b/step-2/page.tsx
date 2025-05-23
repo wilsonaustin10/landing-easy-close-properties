@@ -17,7 +17,7 @@ export default function LandingBStep2Page() {
   const propertyConditions = ['Excellent', 'Good', 'Fair', 'Poor', 'Needs significant repairs'];
   const sellingTimeframes = ['ASAP', 'Within 1 month', '1-2 Months', '3-6 Months', 'Flexible', 'Just curious'];
 
-  const validateStep2 = () => {
+  const validateStep2 = useCallback(() => {
     if (!formState.propertyCondition) {
       setError('Please select the property condition.');
       return false;
@@ -28,7 +28,7 @@ export default function LandingBStep2Page() {
     }
     setError(null);
     return true;
-  };
+  }, [formState.propertyCondition, formState.timeframe]);
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,7 +89,7 @@ export default function LandingBStep2Page() {
     } finally {
       setLoading(false);
     }
-  }, [formState, updateFormData, router, executeRecaptcha]);
+  }, [formState, router, executeRecaptcha, validateStep2]);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-20">

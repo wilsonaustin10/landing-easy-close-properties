@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from '../../context/FormContext';
 import AddressInput from '../../components/AddressInput';
 import type { AddressData } from '../../types/GooglePlacesTypes';
 import { trackEvent } from '../../utils/analytics';
-import { Loader2, CheckCircle, Users, Award, TrendingUp, MessageSquare, Star } from 'lucide-react';
+import { CheckCircle, MessageSquare, TrendingUp } from 'lucide-react';
+import Image from 'next/image';
 
 export default function LandingBPage() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function LandingBPage() {
     if (globalFullName !== localFullName) {
       setLocalFullName(globalFullName);
     }
-  }, [formState.firstName, formState.lastName]);
+  }, [formState.firstName, formState.lastName, localFullName]);
 
   const handleAddressSelect = (addressData: AddressData) => {
     updateFormData({
@@ -281,10 +282,12 @@ export default function LandingBPage() {
                 <div key={index} className="bg-white p-6 rounded-lg shadow-md">
                   <div className="flex items-start space-x-4">
                     <div className="flex-shrink-0">
-                      <img
+                      <Image
                         className="h-12 w-12 rounded-full"
                         src={testimonial.avatar}
                         alt={`${testimonial.name}'s avatar`}
+                        width={48}
+                        height={48}
                       />
                     </div>
                     <div>

@@ -34,7 +34,7 @@ export default function PropertyValuePage() {
       <div className="max-w-md mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Property Value</h1>
-          <p className="text-gray-600">Help us understand your property's value</p>
+          <p className="text-gray-600">Help us understand your property&apos;s value</p>
         </div>
 
         {error && (
@@ -48,7 +48,7 @@ export default function PropertyValuePage() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                What do you think your property is worth?
+                What do you think your property&apos;s worth?
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2 text-gray-500">$</span>
