@@ -8,16 +8,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#101056',
-        secondary: '#D4A344',
+        primary: '#002767',
+        secondary: '#bd0b31',
         accent: '#000000', // COMPANY ACCENT COLOR PLACEHOLDER
-        highlight: '#000000', // COMPANY HIGHLIGHT COLOR PLACEHOLDER
+        highlight: '#ffffff', // COMPANY HIGHLIGHT COLOR PLACEHOLDER
         background: '#ffffff', // White
         text: '#333333', // Dark gray for regular text
         footer: {
-          bg: '#101056',
+          bg: '#bd0b31',
           text: '#ffffff', // White
-          hover: '#EF4444',
+          hover: '#bd0b31',
         }
       },
     },

@@ -10,7 +10,7 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
             <Image
-              src="/ECPtransparent.png"
+              src="/Easy Close Properties Logo.jpeg"
               alt="Easy Close Properties"
               width={160}
               height={42}

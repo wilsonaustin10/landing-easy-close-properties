@@ -5,14 +5,14 @@ import Image from 'next/image';
 
 export default function Footer() {
   return (
-    <footer className="bg-primary text-white">
+    <footer className="bg-secondary text-white">
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center">
               <Image
-                src="/ECPLogo.png"
+                src="/Easy Close Properties Transparent.png"
                 alt="Easy Close Properties"
                 width={100}
                 height={26}
