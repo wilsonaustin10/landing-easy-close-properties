@@ -142,8 +142,8 @@ export default function TermsOfService() {
                   TBA@TBA.com
                 </a>
                 <br />
-                <a href="tel:TBA" className="text-primary hover:underline">
-                  TBA
+                <a href="tel:(302) 592-3436" className="text-primary hover:underline">
+                  (302) 592-3436
                 </a>
               </p>
             </section>

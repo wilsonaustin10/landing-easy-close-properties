@@ -20,7 +20,7 @@ export default function PropertyListing() {
 
             <div className="mb-12">
               <Link
-                href="tel:(512)-792-4086"
+                href="tel:((302) 592-3436"
                 className="inline-block bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-md text-xl font-medium transition-colors"
               >
                 Call Us Now: (512) 792-4086

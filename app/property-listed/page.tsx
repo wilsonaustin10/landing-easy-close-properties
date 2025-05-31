@@ -42,10 +42,10 @@ export default function PropertyListedPage() {
 
             <div className="mb-12">
               <Link
-                href="tel: (469) 415-9588"
+                href="tel: (302) 592-3436"
                 className="inline-block bg-secondary hover:bg-opacity-90 text-black px-8 py-4 rounded-md text-xl font-medium transition-colors"
               >
-                Call Us Now: (469) 415-9588
+                Call Us Now: (302) 592-3436
               </Link>
             </div>
 
