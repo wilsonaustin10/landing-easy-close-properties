@@ -13,26 +13,26 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    name: "Jason & Mary",
-    location: "Dallas, TX",
-    text: "We needed to sell our house fast due to a job relocation. Easy Close Properties helped us with a fair cash offer and closed in just 8 days!",
+    name: "Michael Chen",
+    location: "Restaurant Owner, San Francisco",
+    text: "After 30 years running my restaurant, I was ready to retire. They gave me a fair valuation and kept all my staff employed. The whole process took just 3 weeks!",
     rating: 5
   },
   {
-    name: "Robert Smith",
-    location: "Cleveland, OH",
-    text: "I inherited a property that needed too many repairs. Easy Close Properties bought it as-is and handled everything. No hassle, just cash in my pocket.",
+    name: "Jennifer Adams",
+    location: "Manufacturing CEO, Detroit",
+    text: "Health issues forced me to sell quickly. They understood my urgency, maintained complete confidentiality, and closed in 15 days. No brokers, no drama.",
     rating: 5
   },
   {
-    name: "Sarah Johnson",
-    location: "Jacksonville, FL",
-    text: "After trying to sell with a realtor for 6 months, I contacted Easy Close Properties. They closed quickly and even covered all closing costs!",
+    name: "David Martinez",
+    location: "Auto Shop Owner, Phoenix",
+    text: "I was burned out after 20 years. They valued my business fairly, including all equipment and customer base. Now I'm enjoying retirement while my shop continues to thrive.",
     rating: 5
   }
 ];
 
-export default function Testimonials() {
+export default function BusinessTestimonials() {
   return (
     <section className="py-16 bg-gray-50">
       <div className="max-w-6xl mx-auto px-4">

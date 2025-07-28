@@ -5,14 +5,14 @@ interface BenefitsProps {
   className?: string;
 }
 
-export function Benefits({ className }: BenefitsProps) {
+export function BusinessBenefits({ className }: BenefitsProps) {
   const benefits = [
-    "We buy houses in any condition",
-    "No obligation offer",
-    "No fees",
-    "Confidential",
-    "No repairs necessary",
-    "We pay closing costs"
+    "100% Confidential Process",
+    "Free Business Valuation",
+    "No Broker Fees",
+    "Employee Protection",
+    "Flexible Exit Terms",
+    "Expert M&A Support"
   ]
 
   return (

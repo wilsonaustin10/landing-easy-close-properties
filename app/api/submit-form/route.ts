@@ -2,9 +2,27 @@ import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { LeadFormData } from '@/types';
 import { rateLimit } from '@/utils/rateLimit';
+import { ghlIntegration } from '@/utils/ghlIntegration';
+import { numverifyClient } from '@/utils/numverify';
 
-// Validate complete form data
-function validateFormData(data: Partial<LeadFormData>): data is LeadFormData {
+// Business form data interface
+interface BusinessFormData {
+  businessType: string;
+  annualRevenue: string;
+  reasonForSelling: string;
+  timeline: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  leadId: string;
+  submissionType: string;
+  timestamp: string;
+  recaptchaToken?: string;
+}
+
+// Validate complete property form data
+function validatePropertyFormData(data: Partial<LeadFormData>): data is LeadFormData {
   if (!data || typeof data !== 'object') {
     throw new Error('Invalid data format');
   }
@@ -31,33 +49,72 @@ function validateFormData(data: Partial<LeadFormData>): data is LeadFormData {
   return true;
 }
 
-// Send data to Zapier webhook
-async function sendToZapier(data: LeadFormData) {
-  // Debug log to check environment variable
-  console.log('ZAPIER_WEBHOOK_URL value:', process.env.ZAPIER_WEBHOOK_URL);
+// Validate business form data
+function validateBusinessFormData(data: Partial<BusinessFormData>): data is BusinessFormData {
+  if (!data || typeof data !== 'object') {
+    throw new Error('Invalid data format');
+  }
+
+  // Required fields validation
+  const requiredFields: (keyof BusinessFormData)[] = [
+    'businessType', 'annualRevenue', 'reasonForSelling', 
+    'timeline', 'firstName', 'lastName', 'email', 'phone', 'leadId'
+  ];
   
-  // Use environment variable or fallback to the value from .env.local if it exists
-  const webhookUrl = process.env.ZAPIER_WEBHOOK_URL;
+  for (const field of requiredFields) {
+    if (!data[field]) {
+      throw new Error(`${field} is required`);
+    }
+  }
+
+  return true;
+}
+
+// Verify reCAPTCHA token
+async function verifyRecaptcha(token: string): Promise<boolean> {
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
   
-  if (!webhookUrl) {
-    throw new Error('Zapier webhook URL not configured');
+  if (!secretKey) {
+    console.warn('reCAPTCHA secret key not configured');
+    return true; // Allow submission in development
   }
 
   try {
-    // Format data for Zapier
+    const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `secret=${secretKey}&response=${token}`,
+    });
+
+    const data = await response.json();
+    return data.success && data.score >= 0.5;
+  } catch (error) {
+    console.error('reCAPTCHA verification error:', error);
+    return false;
+  }
+}
+
+// Send data to Zapier webhook (for backward compatibility)
+async function sendToZapier(data: LeadFormData | BusinessFormData) {
+  const webhookUrl = process.env.ZAPIER_WEBHOOK_URL;
+  
+  if (!webhookUrl) {
+    console.log('Zapier webhook URL not configured, skipping...');
+    return;
+  }
+
+  try {
     const formattedTimestamp = new Date().toLocaleString();
     
-    // Create a comprehensive payload with all form data
     const payload = {
       ...data,
-      submissionType: 'complete',
       formattedTimestamp,
       phoneRaw: data.phone ? data.phone.replace(/\D/g, '') : '',
-      isPropertyListedText: data.isPropertyListed ? 'Yes' : 'No',
       fullName: `${data.firstName} ${data.lastName}`
     };
 
-    // Send to Zapier webhook
     const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: {
@@ -73,29 +130,25 @@ async function sendToZapier(data: LeadFormData) {
         statusText: response.statusText,
         error: errorText
       });
-      throw new Error(`Failed to send to Zapier: ${response.statusText}`);
     }
-
-    return await response.json();
   } catch (error) {
     console.error('Error in sendToZapier:', error);
-    throw error;
   }
 }
 
 /**
- * API Route for saving complete property details
- * Used for full form submissions with all property information
+ * API Route for saving form submissions
+ * Handles both property and business acquisition forms
  */
 export async function POST(request: Request) {
   try {
     // Log incoming request
-    console.log('Received complete form submission request');
+    console.log('Received form submission request');
 
     // 1. Rate limiting check
     const headersList = headers();
     const ip = headersList.get('x-forwarded-for') || 'unknown';
-    const timestamp = new Date().toISOString();
+    // const timestamp = new Date().toISOString();
     
     const rateLimitResult = await rateLimit(ip);
     if (!rateLimitResult.success) {
@@ -106,12 +159,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. Parse and validate request data
+    // 2. Parse request data
     let data;
     try {
       data = await request.json();
       console.log('Received form data:', {
-        hasRequiredFields: true,
+        submissionType: data.submissionType,
         leadId: data.leadId
       });
     } catch (parseError) {
@@ -122,38 +175,75 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!validateFormData(data)) {
-      console.error('Invalid form data:', data);
-      return NextResponse.json(
-        { error: 'Invalid form data - Missing required fields or invalid format' },
-        { status: 400 }
-      );
+    // 3. Verify reCAPTCHA if token provided
+    if (data.recaptchaToken) {
+      const isValidRecaptcha = await verifyRecaptcha(data.recaptchaToken);
+      if (!isValidRecaptcha) {
+        return NextResponse.json(
+          { error: 'reCAPTCHA verification failed' },
+          { status: 400 }
+        );
+      }
     }
 
-    // 3. Prepare data with tracking information
-    const formData: LeadFormData = {
-      ...data,
-      timestamp: data.timestamp || timestamp,
-      lastUpdated: timestamp
-    };
+    // 4. Handle based on submission type
+    if (data.submissionType === 'business_acquisition') {
+      // Validate business form
+      if (!validateBusinessFormData(data)) {
+        return NextResponse.json(
+          { error: 'Invalid form data - Missing required fields' },
+          { status: 400 }
+        );
+      }
 
-    // 4. Send to Zapier webhook
-    try {
-      await sendToZapier(formData);
-      console.log('Successfully sent to Zapier webhook');
+      // Validate phone with numverify
+      const phoneValidation = await numverifyClient.validatePhoneWithCache(data.phone);
+      if (!phoneValidation.valid) {
+        return NextResponse.json(
+          { error: phoneValidation.error || 'Invalid phone number' },
+          { status: 400 }
+        );
+      }
+
+      // Update phone with formatted version
+      data.phone = phoneValidation.formatted;
+
+      // Submit to GHL
+      const ghlSuccess = await ghlIntegration.submitBusinessLead(data);
       
+      if (!ghlSuccess) {
+        console.error('Failed to submit to GHL, falling back to Zapier');
+      }
+
+      // Also send to Zapier for backup
+      await sendToZapier(data);
+
+      return NextResponse.json({ 
+        success: true,
+        leadId: data.leadId,
+        message: 'Business inquiry submitted successfully'
+      });
+
+    } else {
+      // Handle property form (existing logic)
+      if (!validatePropertyFormData(data)) {
+        return NextResponse.json(
+          { error: 'Invalid form data - Missing required fields or invalid format' },
+          { status: 400 }
+        );
+      }
+
+      // Send to Zapier webhook
+      await sendToZapier(data);
+
       return NextResponse.json({ 
         success: true,
         leadId: data.leadId
       });
-    } catch (error) {
-      console.error('Failed to send to Zapier:', error);
-      throw error;
     }
 
   } catch (error) {
-    console.error('Error submitting complete form:', error);
-    // Return a specific error message
+    console.error('Error submitting form:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json(
       { 
@@ -163,4 +253,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

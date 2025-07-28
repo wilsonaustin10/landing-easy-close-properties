@@ -1,27 +1,27 @@
 import React from 'react';
 import { MessageSquare, Clock, HandshakeIcon, Banknote } from 'lucide-react';
 
-export function HowItWorks() {
+export function BusinessHowItWorks() {
   const steps = [
     {
       icon: MessageSquare,
-      title: 'Tell us about your property',
-      description: "It's quick, easy, and free!"
+      title: 'Share Your Business Details',
+      description: "Quick 2-minute confidential form"
     },
     {
       icon: Clock,
-      title: 'If it meets our buying criteria',
-      description: 'We will contact you to setup a quick appointment.'
+      title: 'Free Business Valuation',
+      description: 'Our M&A experts analyze your business within 24 hours'
     },
     {
       icon: HandshakeIcon,
-      title: 'We present you with a fair all-cash offer',
-      description: 'Or discuss the best method to proceed.'
+      title: 'Receive Your Fair Offer',
+      description: 'Cash offer based on revenue, assets, and potential'
     },
     {
       icon: Banknote,
-      title: 'We close at a local reputable title company',
-      description: 'Have cash in your hands in as little as 7 days!'
+      title: 'Close on Your Timeline',
+      description: 'Complete the sale in 30 days or on your schedule'
     }
   ];
 
@@ -29,7 +29,7 @@ export function HowItWorks() {
     <section className="py-16 bg-gray-50" id="how-it-works">
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-12">
-          How The Process Works
+          Your Exit Strategy in 4 Simple Steps
         </h2>
         
         <div className="grid md:grid-cols-4 gap-8">
@@ -53,15 +53,13 @@ export function HowItWorks() {
 
         <div className="mt-12 bg-white p-6 rounded-lg shadow-sm">
           <p className="text-center text-gray-700">
-            <span className="font-semibold">Timeframe:</span> Once we get your information, we&apos;re usually able to make you a fair all-cash offer within 24 hours. From there, we can close as quickly as 7 days… or on your schedule.
+            <span className="font-semibold">Complete Confidentiality:</span> Your employees, customers, and competitors won&apos;t know until you&apos;re ready. We understand the sensitive nature of business sales.
           </p>
         </div>
 
         <div className="mt-12 bg-white p-6 rounded-lg shadow-sm">
           <p className="text-lg text-gray-600">
-            No repairs, no cleaning, no showings. Just a straightforward sale so you can move on.
-            We handle all the paperwork and complexities, ensuring a smooth and stress-free transaction from start to finish.
-            You won&apos;t have to worry about a thing.
+            We&apos;ve helped over 200 business owners transition successfully. Our team handles all legal, financial, and operational aspects, ensuring your legacy continues while you enjoy your well-deserved retirement.
           </p>
         </div>
       </div>
