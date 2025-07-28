@@ -5,6 +5,7 @@ interface GHLContact {
   phone: string;
   customField?: Record<string, any>;
   tags?: string[];
+  notes?: string;
 }
 
 interface GHLOpportunity {
@@ -14,6 +15,7 @@ interface GHLOpportunity {
   contactId: string;
   monetaryValue?: number;
   customFields?: Record<string, any>;
+  notes?: string;
 }
 
 export class GHLIntegration {
@@ -91,8 +93,38 @@ export class GHLIntegration {
     }
   }
 
+  async addNoteToContact(contactId: string, note: string): Promise<boolean> {
+    try {
+      const response = await fetch(`${this.baseUrl}/contacts/${contactId}/notes`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({
+          body: note,
+          userId: this.locationId,
+        }),
+      });
+
+      return response.ok;
+    } catch (error) {
+      console.error('Error adding note to contact:', error);
+      return false;
+    }
+  }
+
   async submitBusinessLead(formData: any): Promise<boolean> {
     try {
+      // Create formatted notes with all form data
+      const formNotes = `Business Seller Lead - Form Submission Details:
+      
+Business Type: ${formData.businessType}
+Annual Revenue: ${formData.annualRevenue}
+Reason for Selling: ${formData.reasonForSelling}
+Timeline: ${formData.timeline}
+      
+Submitted: ${new Date().toLocaleString()}
+Lead ID: ${formData.leadId}
+Source: Business Acquisition Landing Page (/sell-your-business)`;
+
       // Create contact first
       const contactId = await this.createContact({
         firstName: formData.firstName,
@@ -106,7 +138,8 @@ export class GHLIntegration {
           timeline: formData.timeline,
           leadId: formData.leadId,
         },
-        tags: ['business-acquisition', 'web-lead', formData.reasonForSelling],
+        tags: ['business-sellers', 'business-acquisition', 'web-lead', formData.reasonForSelling.toLowerCase().replace(/\s+/g, '-')],
+        notes: formNotes,
       });
 
       if (!contactId) {
@@ -127,6 +160,7 @@ export class GHLIntegration {
           timeline: formData.timeline,
           submittedAt: new Date().toISOString(),
         },
+        notes: `Business Details:\n${formNotes}\n\nNext Steps: Schedule initial consultation call`,
       });
 
       if (!opportunityId) {
