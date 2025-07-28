@@ -138,10 +138,6 @@ export default function TermsOfService() {
               <p>
                 If you have any questions about these Terms, please contact us at:
                 <br />
-                <a href="mailto:TBA@TBA.com" className="text-primary hover:underline">
-                  TBA@TBA.com
-                </a>
-                <br />
                 <a href="tel:(302) 592-3436" className="text-primary hover:underline">
                   (302) 592-3436
                 </a>

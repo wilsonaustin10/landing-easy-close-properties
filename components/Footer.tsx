@@ -30,13 +30,6 @@ export default function Footer() {
                 <Phone className="h-4 w-4" />
                 <span>(302) 592-3436</span>
               </a>
-              <a 
-                href="mailto:TBA@TBA.com"
-                className="flex items-center space-x-2 text-white/80 hover:text-red-400 transition-colors"
-              >
-                <Mail className="h-4 w-4" />
-                <span>TBA@TBA.com</span>
-              </a>
             </div>
           </div>
 

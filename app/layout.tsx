@@ -29,7 +29,7 @@ export default function RootLayout({
         />
         <Script
           strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=AW-17041108639"
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17109864760"
         />
         <Script
           id="gtag-init"

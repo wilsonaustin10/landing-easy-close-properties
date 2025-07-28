@@ -128,10 +128,6 @@ export default function PrivacyPolicy() {
               <p>
                 To ask questions or comment about this privacy policy and our privacy practices, contact us at: 
                 <br />
-                <a href="mailto:TBA@TBA.com" className="text-primary hover:underline">
-                  TBA@TBA.com
-                </a>
-                <br />
                 <a href="tel:(302) 592-3436" className="text-primary hover:underline">
                   (302) 592-3436
                 </a>
