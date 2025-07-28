@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Mail, Phone } from 'lucide-react';
+import { Phone } from 'lucide-react';
 import Image from 'next/image';
 
 export default function Footer() {
