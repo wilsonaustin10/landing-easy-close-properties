@@ -27,17 +27,24 @@ export default function LeadForm() {
   const router = useRouter();
 
   useEffect(() => {
-    const checkGoogleMapsLoaded = () => {
+    const handleGoogleMapsLoaded = () => {
       if (window.google?.maps?.places) {
         setIsGoogleLoaded(true);
-      } else {
-        console.error('Google Maps Places API not loaded');
-        // Retry after a short delay
-        setTimeout(checkGoogleMapsLoaded, 1000);
+        console.log('Google Maps Places API is ready');
       }
     };
 
-    checkGoogleMapsLoaded();
+    // Check if already loaded
+    if (window.google?.maps?.places) {
+      setIsGoogleLoaded(true);
+    } else {
+      // Listen for the custom event
+      window.addEventListener('google-maps-loaded', handleGoogleMapsLoaded);
+    }
+
+    return () => {
+      window.removeEventListener('google-maps-loaded', handleGoogleMapsLoaded);
+    };
   }, []);
 
   const validatePhone = (phone: string) => {

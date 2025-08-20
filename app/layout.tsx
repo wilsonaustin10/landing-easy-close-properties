@@ -19,16 +19,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <Script
-          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&loading=async`}
-          strategy="beforeInteractive"
-          onLoad={() => {
-            console.log('Google Maps script loaded');
-          }}
-          onError={(e) => {
-            console.error('Error loading Google Maps script:', e);
-          }}
-        />
-        <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=AW-17109864760"
         />
@@ -55,6 +45,22 @@ export default function RootLayout({
             <Footer />
           </FormProvider>
         </ReCaptchaProvider>
+        <Script
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&callback=initGoogleMaps`}
+          strategy="lazyOnload"
+        />
+        <Script
+          id="google-maps-init"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.initGoogleMaps = function() {
+                console.log('Google Maps initialized');
+                window.dispatchEvent(new Event('google-maps-loaded'));
+              };
+            `,
+          }}
+        />
       </body>
     </html>
   );
