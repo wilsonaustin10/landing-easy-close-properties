@@ -4,6 +4,7 @@ import { LeadFormData } from '@/types';
 import { rateLimit } from '@/utils/rateLimit';
 import { ghlIntegration } from '@/utils/ghlIntegration';
 import { numverifyClient } from '@/utils/numverify';
+import { googleSheetsClient, initializeGoogleSheets } from '@/utils/googleSheets';
 
 // Business form data interface
 interface BusinessFormData {
@@ -268,6 +269,18 @@ export async function POST(request: Request) {
       // Also send to Zapier for backup
       await sendToZapier(data);
 
+      // Send to Google Sheets
+      try {
+        await initializeGoogleSheets(); // Ensure headers are set
+        const googleSheetsSuccess = await googleSheetsClient.appendBusinessLead(data);
+        if (!googleSheetsSuccess) {
+          console.log('Failed to send business lead to Google Sheets (non-critical)');
+        }
+      } catch (error) {
+        console.error('Error sending business lead to Google Sheets:', error);
+        // Don't fail the request if Google Sheets fails
+      }
+
       return NextResponse.json({ 
         success: true,
         leadId: data.leadId,
@@ -285,6 +298,18 @@ export async function POST(request: Request) {
 
       // Send to Zapier webhook
       await sendToZapier(data);
+
+      // Send to Google Sheets
+      try {
+        await initializeGoogleSheets(); // Ensure headers are set
+        const googleSheetsSuccess = await googleSheetsClient.appendPropertyLead(data);
+        if (!googleSheetsSuccess) {
+          console.log('Failed to send property lead to Google Sheets (non-critical)');
+        }
+      } catch (error) {
+        console.error('Error sending property lead to Google Sheets:', error);
+        // Don't fail the request if Google Sheets fails
+      }
 
       return NextResponse.json({ 
         success: true,
