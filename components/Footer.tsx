@@ -52,6 +52,11 @@ export default function Footer() {
                   Testimonials
                 </Link>
               </li>
+              <li>
+                <Link href="/sell-your-business" className="text-white/80 hover:text-red-400 transition-colors">
+                  Sell Your Business
+                </Link>
+              </li>
             </ul>
           </div>
 

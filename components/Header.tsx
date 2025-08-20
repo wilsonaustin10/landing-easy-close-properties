@@ -39,7 +39,13 @@ export default function Header() {
               Testimonials
             </Link>
           </nav>
-          <div className="flex items-center">
+          <div className="flex items-center space-x-3">
+            <Link
+              href="/sell-your-business"
+              className="inline-flex items-center px-4 py-2 border border-primary text-base font-medium rounded-md text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
+            >
+              Sell Your Business
+            </Link>
             <Link
               href="/#property-form"
               className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-secondary hover:bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition-colors"
