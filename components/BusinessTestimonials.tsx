@@ -15,7 +15,7 @@ const testimonials: Testimonial[] = [
   {
     name: "Michael Chen",
     location: "Restaurant Owner, San Francisco",
-    text: "After 30 years running my restaurant, I was ready to retire. They gave me a fair valuation and kept all my staff employed. The whole process took just 3 weeks!",
+    text: "After 30 years running my restaurant, I was ready for something new. They gave me a fair valuation and kept all my staff employed. The whole process took just 3 weeks!",
     rating: 5
   },
   {
@@ -27,7 +27,7 @@ const testimonials: Testimonial[] = [
   {
     name: "David Martinez",
     location: "Auto Shop Owner, Phoenix",
-    text: "I was burned out after 20 years. They valued my business fairly, including all equipment and customer base. Now I'm enjoying retirement while my shop continues to thrive.",
+    text: "I was burned out after 20 years. They valued my business fairly, including all equipment and customer base. Now I'm enjoying my next adventure while my shop continues to thrive.",
     rating: 5
   }
 ];

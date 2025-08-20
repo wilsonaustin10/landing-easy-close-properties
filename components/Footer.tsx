@@ -1,9 +1,20 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { Phone } from 'lucide-react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import BusinessFooter from './BusinessFooter';
 
 export default function Footer() {
+  const pathname = usePathname();
+  
+  // Show BusinessFooter on sell-your-business pages
+  if (pathname?.startsWith('/sell-your-business')) {
+    return <BusinessFooter />;
+  }
+
   return (
     <footer className="bg-secondary text-white">
       <div className="max-w-6xl mx-auto px-4 py-12">

@@ -16,7 +16,7 @@ export function BusinessHowItWorks() {
     {
       icon: HandshakeIcon,
       title: 'Receive Your Fair Offer',
-      description: 'Cash offer based on revenue, assets, and potential'
+      description: 'Fair offer based on revenue, assets, and potential'
     },
     {
       icon: Banknote,
@@ -59,7 +59,7 @@ export function BusinessHowItWorks() {
 
         <div className="mt-12 bg-white p-6 rounded-lg shadow-sm">
           <p className="text-lg text-gray-600">
-            We&apos;ve helped over 200 business owners transition successfully. Our team handles all legal, financial, and operational aspects, ensuring your legacy continues while you enjoy your well-deserved retirement.
+            We&apos;ve helped over 200 business owners transition successfully. Our team handles all legal, financial, and operational aspects, ensuring your legacy continues while you move on to your next chapter.
           </p>
         </div>
       </div>

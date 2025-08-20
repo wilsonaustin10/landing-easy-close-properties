@@ -14,10 +14,10 @@ export default function SellYourBusiness() {
         <div className="max-w-6xl mx-auto">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Ready to Retire? We Buy Your Business in 30 Days or Less
+              Ready to Sell? We Buy Your Business in 30 Days or Less
             </h1>
             <p className="text-xl text-white mb-8">
-              Fair cash offers for retiring business owners - No broker fees, complete confidentiality, and we care about your legacy
+              Fair offers for business owners - No broker fees, complete confidentiality, and we care about your legacy
             </p>
           </div>
           <div className="max-w-md mx-auto">

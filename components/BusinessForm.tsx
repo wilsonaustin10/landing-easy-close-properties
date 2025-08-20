@@ -37,7 +37,7 @@ const revenueRanges = [
 ];
 
 const reasons = [
-  'Planning Retirement',
+  'Ready for Next Chapter',
   'Health Reasons',
   'Burnout/Lifestyle Change',
   'Financial Pressure',
