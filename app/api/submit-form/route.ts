@@ -208,11 +208,61 @@ export async function POST(request: Request) {
       // Update phone with formatted version
       data.phone = phoneValidation.formatted;
 
-      // Submit to GHL
-      const ghlSuccess = await ghlIntegration.submitBusinessLead(data);
-      
-      if (!ghlSuccess) {
-        console.error('Failed to submit to GHL, falling back to Zapier');
+      // Send to new business acquisition webhook (skip in local development)
+      if (process.env.NODE_ENV === 'production') {
+        try {
+          const response = await fetch('https://api.monopolymoney.ca/api/webhooks/easy-close-business-acquisition', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              ...data,
+              formattedTimestamp: new Date().toLocaleString(),
+              phoneRaw: data.phone.replace(/\D/g, ''),
+              fullName: `${data.firstName} ${data.lastName}`
+            })
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Business acquisition webhook error:', {
+              status: response.status,
+              statusText: response.statusText,
+              error: errorText
+            });
+            
+            // Fallback to GHL if new webhook fails
+            const ghlSuccess = await ghlIntegration.submitBusinessLead(data);
+            if (!ghlSuccess) {
+              console.error('Failed to submit to both new webhook and GHL');
+            }
+          } else {
+            console.log('Successfully sent business lead to new webhook');
+          }
+        } catch (error) {
+          console.error('Error sending to business acquisition webhook:', error);
+          
+          // Fallback to GHL if new webhook fails
+          const ghlSuccess = await ghlIntegration.submitBusinessLead(data);
+          if (!ghlSuccess) {
+            console.error('Failed to submit to both new webhook and GHL');
+          }
+        }
+      } else {
+        // In development, just log the data that would be sent
+        console.log('Development mode - Would send to business acquisition webhook:', {
+          ...data,
+          formattedTimestamp: new Date().toLocaleString(),
+          phoneRaw: data.phone.replace(/\D/g, ''),
+          fullName: `${data.firstName} ${data.lastName}`
+        });
+        
+        // Still try GHL in development if configured
+        const ghlSuccess = await ghlIntegration.submitBusinessLead(data);
+        if (!ghlSuccess) {
+          console.log('GHL not configured or failed in development');
+        }
       }
 
       // Also send to Zapier for backup

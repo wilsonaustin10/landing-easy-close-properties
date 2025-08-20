@@ -6,14 +6,14 @@ import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 const ReCaptchaProvider = ({ children }: { children: React.ReactNode }) => {
   const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
-  if (!recaptchaSiteKey) {
+  // Skip ReCaptcha provider in development if no key is set
+  if (!recaptchaSiteKey || recaptchaSiteKey === 'test-site-key') {
     if (process.env.NODE_ENV !== 'production') {
       console.warn(
-        "reCAPTCHA site key not found. Please set NEXT_PUBLIC_RECAPTCHA_SITE_KEY in your .env.local file. reCAPTCHA will not be active."
+        "ReCAPTCHA disabled in development. Set a valid NEXT_PUBLIC_RECAPTCHA_SITE_KEY to test ReCAPTCHA."
       );
     }
-    // In development, you might want to allow the app to run without reCAPTCHA
-    // In production, you might want to throw an error or render a specific message
+    // Return children without the provider wrapper
     return <>{children}</>;
   }
 
