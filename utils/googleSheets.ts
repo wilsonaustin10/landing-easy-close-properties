@@ -68,28 +68,27 @@ class GoogleSheetsClient {
       // Prepare row data in the order you want columns to appear
       const values = [[
         timestamp,
-        data.leadId,
-        data.firstName,
-        data.lastName,
-        data.email,
+        data.leadId || '',
+        data.firstName || '',
+        data.lastName || '',
+        data.email || '',
         data.phone,
         data.address,
-        data.propertyCondition,
-        data.timeframe,
-        data.price,
-        data.additionalInfo || '',
-        data.source || 'Website',
-        data.referrer || '',
-        data.utmCampaign || '',
-        data.utmSource || '',
-        data.utmMedium || '',
-        data.utmTerm || '',
-        data.utmContent || ''
+        data.propertyCondition || '',
+        data.timeframe || '',
+        data.price || '',
+        data.comments || '',
+        data.referralSource || 'Website',
+        data.streetAddress || '',
+        data.city || '',
+        data.state || '',
+        data.postalCode || '',
+        data.isPropertyListed ? 'Yes' : 'No'
       ]];
 
       const response = await this.sheets.spreadsheets.values.append({
         spreadsheetId,
-        range: 'Sheet1!A:R', // Adjust range based on your columns
+        range: 'Sheet1!A:Q', // Adjust range based on your columns
         valueInputOption: 'USER_ENTERED',
         requestBody: {
           values,
@@ -266,17 +265,16 @@ export async function initializeGoogleSheets() {
       'Property Condition',
       'Timeframe',
       'Price',
-      'Additional Info',
-      'Source',
-      'Referrer',
-      'UTM Campaign',
-      'UTM Source',
-      'UTM Medium',
-      'UTM Term',
-      'UTM Content'
+      'Comments',
+      'Referral Source',
+      'Street Address',
+      'City',
+      'State',
+      'Postal Code',
+      'Is Listed'
     ];
     
-    await googleSheetsClient.addHeadersIfEmpty(propertySheetId, propertyHeaders, 'Sheet1!A1:R1');
+    await googleSheetsClient.addHeadersIfEmpty(propertySheetId, propertyHeaders, 'Sheet1!A1:Q1');
   }
 
   if (businessSheetId) {
