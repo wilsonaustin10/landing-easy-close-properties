@@ -30,11 +30,29 @@ class GoogleSheetsClient {
       const credentials = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
       
       if (!credentials) {
-        console.warn('Google Service Account credentials not configured');
+        console.warn('GOOGLE_SERVICE_ACCOUNT_KEY environment variable not set');
         return;
       }
 
-      const credentialsJson = JSON.parse(credentials);
+      console.log('Attempting to parse Google Service Account credentials...');
+      
+      // Handle different formats of credentials
+      let credentialsJson;
+      try {
+        // First try to parse as-is
+        credentialsJson = JSON.parse(credentials);
+      } catch (e) {
+        // If that fails, try to handle escaped JSON
+        try {
+          credentialsJson = JSON.parse(credentials.replace(/\\n/g, '\n'));
+        } catch (e2) {
+          console.error('Failed to parse GOOGLE_SERVICE_ACCOUNT_KEY. Make sure it\'s valid JSON.');
+          console.error('First 100 chars of key:', credentials.substring(0, 100));
+          throw e2;
+        }
+      }
+      
+      console.log('Service account email:', credentialsJson.client_email);
       
       this.auth = new google.auth.GoogleAuth({
         credentials: credentialsJson,
@@ -43,6 +61,7 @@ class GoogleSheetsClient {
 
       this.sheets = google.sheets({ version: 'v4', auth: this.auth });
       this.initialized = true;
+      console.log('Google Sheets client initialized successfully');
     } catch (error) {
       console.error('Failed to initialize Google Sheets client:', error);
       this.initialized = false;
@@ -50,6 +69,8 @@ class GoogleSheetsClient {
   }
 
   async appendPropertyLead(data: LeadFormData) {
+    console.log('appendPropertyLead called with data:', { leadId: data.leadId, firstName: data.firstName, lastName: data.lastName });
+    
     if (!this.initialized) {
       console.log('Google Sheets client not initialized, skipping property lead submission');
       return false;
@@ -58,9 +79,11 @@ class GoogleSheetsClient {
     const spreadsheetId = process.env.GOOGLE_SHEETS_PROPERTY_ID;
     
     if (!spreadsheetId) {
-      console.log('Property leads Google Sheet ID not configured');
+      console.log('GOOGLE_SHEETS_PROPERTY_ID environment variable not set');
       return false;
     }
+    
+    console.log('Using property sheet ID:', spreadsheetId)
 
     try {
       const timestamp = new Date().toISOString();
@@ -95,15 +118,21 @@ class GoogleSheetsClient {
         },
       });
 
-      console.log('Successfully appended property lead to Google Sheet:', response.data);
+      console.log('Successfully appended property lead to Google Sheet');
+      console.log('Response:', JSON.stringify(response.data, null, 2));
       return true;
-    } catch (error) {
-      console.error('Error appending property lead to Google Sheet:', error);
+    } catch (error: any) {
+      console.error('Error appending property lead to Google Sheet:', error.message || error);
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+      }
       return false;
     }
   }
 
   async appendBusinessLead(data: BusinessFormData) {
+    console.log('appendBusinessLead called with data:', { leadId: data.leadId, firstName: data.firstName, lastName: data.lastName });
+    
     if (!this.initialized) {
       console.log('Google Sheets client not initialized, skipping business lead submission');
       return false;
@@ -112,9 +141,11 @@ class GoogleSheetsClient {
     const spreadsheetId = process.env.GOOGLE_SHEETS_BUSINESS_ID;
     
     if (!spreadsheetId) {
-      console.log('Business leads Google Sheet ID not configured');
+      console.log('GOOGLE_SHEETS_BUSINESS_ID environment variable not set');
       return false;
     }
+    
+    console.log('Using business sheet ID:', spreadsheetId)
 
     try {
       const timestamp = new Date().toISOString();
@@ -143,10 +174,14 @@ class GoogleSheetsClient {
         },
       });
 
-      console.log('Successfully appended business lead to Google Sheet:', response.data);
+      console.log('Successfully appended business lead to Google Sheet');
+      console.log('Response:', JSON.stringify(response.data, null, 2));
       return true;
-    } catch (error) {
-      console.error('Error appending business lead to Google Sheet:', error);
+    } catch (error: any) {
+      console.error('Error appending business lead to Google Sheet:', error.message || error);
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+      }
       return false;
     }
   }
