@@ -37,7 +37,7 @@ export default function ThankYouPage() {
         // Track conversion with enhanced data
         trackGoogleAdsConversion({
           conversionLabel: getConversionLabel('property'),
-          value: data.estimatedValue || 250000, // Use property value if available
+          value: 10, // $10 per qualified lead
           transactionId: data.leadId || `lead_${Date.now()}`,
           email: data.email,
           phone: data.phone,
@@ -62,7 +62,7 @@ export default function ThankYouPage() {
         // Fallback to basic conversion tracking
         trackGoogleAdsConversion({
           conversionLabel: getConversionLabel('property'),
-          value: 250000, // Default value for property leads
+          value: 10, // $10 per qualified lead
           transactionId: `lead_${Date.now()}`
         });
       }
@@ -70,7 +70,7 @@ export default function ThankYouPage() {
       // Fallback to basic conversion tracking if no stored data
       trackGoogleAdsConversion({
         conversionLabel: getConversionLabel('property'),
-        value: 250000, // Default value for property leads
+        value: 10, // $10 per qualified lead
         transactionId: `lead_${Date.now()}`
       });
     }

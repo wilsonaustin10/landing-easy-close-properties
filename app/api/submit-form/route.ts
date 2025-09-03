@@ -293,7 +293,7 @@ export async function POST(request: Request) {
         if (process.env.ENABLE_SERVER_SIDE_CONVERSION === 'true') {
           await trackServerSideConversion({
             conversionLabel: getConversionLabel('business'),
-            value: parseInt(data.annualRevenue) || 1000000,
+            value: 10, // $10 per qualified lead
             transactionId: data.leadId,
             email: data.email,
             phone: data.phone,
@@ -350,7 +350,7 @@ export async function POST(request: Request) {
         if (process.env.ENABLE_SERVER_SIDE_CONVERSION === 'true') {
           await trackServerSideConversion({
             conversionLabel: getConversionLabel('property'),
-            value: parseInt(data.price) || 250000,
+            value: 10, // $10 per qualified lead
             transactionId: data.leadId,
             email: data.email,
             phone: data.phone,

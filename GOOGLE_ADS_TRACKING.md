@@ -87,9 +87,13 @@ Note: If you have a separate conversion action for business leads, update `NEXT_
 
 ## Conversion Values
 
-The system automatically assigns values:
-- **Property Leads**: Uses the estimated property value from the form, defaults to $250,000
-- **Business Leads**: Uses annual revenue from the form, defaults to $1,000,000
+The system assigns a fixed value of **$10 per qualified lead** for both property and business leads.
+
+This represents the actual value of a lead to your business, not the property or business value itself. Google Ads uses this to optimize for leads that are worth $10 to your business based on your typical close rate and profit margins.
+
+To adjust this value, update the `value` parameter in:
+- Property leads: `app/thank-you/page.tsx`
+- Business leads: `app/sell-your-business/thank-you/page.tsx`
 
 ## Conversion Deduplication
 

@@ -32,7 +32,7 @@ export default function BusinessThankYouPage() {
         // Track conversion with enhanced data
         trackGoogleAdsConversion({
           conversionLabel: getConversionLabel('business'),
-          value: parseInt(data.annualRevenue) || 1000000, // Use annual revenue as value
+          value: 10, // $10 per qualified lead
           transactionId: data.leadId || `business_${Date.now()}`,
           email: data.email,
           phone: data.phone,
@@ -50,7 +50,7 @@ export default function BusinessThankYouPage() {
         // Fallback to basic conversion tracking
         trackGoogleAdsConversion({
           conversionLabel: getConversionLabel('business'),
-          value: 1000000, // Default value for business leads
+          value: 10, // $10 per qualified lead
           transactionId: `business_${Date.now()}`
         });
       }
@@ -58,7 +58,7 @@ export default function BusinessThankYouPage() {
       // Fallback to basic conversion tracking if no stored data
       trackGoogleAdsConversion({
         conversionLabel: getConversionLabel('business'),
-        value: 1000000, // Default value for business leads
+        value: 10, // $10 per qualified lead
         transactionId: `business_${Date.now()}`
       });
     }
