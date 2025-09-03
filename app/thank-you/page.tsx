@@ -6,9 +6,23 @@ import { CheckCircle, Clock, Phone, ArrowRight } from 'lucide-react';
 import { trackEvent } from '../../utils/analytics';
 import { trackGoogleAdsConversion, getConversionLabel } from '../../utils/googleAdsConversion';
 
+interface FormData {
+  leadId?: string;
+  email?: string;
+  phone?: string;
+  firstName?: string;
+  lastName?: string;
+  streetAddress?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  estimatedValue?: number;
+}
+
 export default function ThankYouPage() {
   // const router = useRouter(); // router is unused
-  const [formData, setFormData] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [formData, setFormData] = useState<FormData | null>(null);
 
   useEffect(() => {
     trackEvent('thank_you_page_view');

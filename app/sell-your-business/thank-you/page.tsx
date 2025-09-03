@@ -6,8 +6,18 @@ import { trackEvent } from '../../../utils/analytics';
 import { trackGoogleAdsConversion, getConversionLabel } from '../../../utils/googleAdsConversion';
 import CalendarScheduler from '../../../components/CalendarScheduler';
 
+interface BusinessFormData {
+  leadId?: string;
+  email?: string;
+  phone?: string;
+  firstName?: string;
+  lastName?: string;
+  annualRevenue?: string;
+}
+
 export default function BusinessThankYouPage() {
-  const [formData, setFormData] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [formData, setFormData] = useState<BusinessFormData | null>(null);
 
   useEffect(() => {
     trackEvent('business_thank_you_page_view');

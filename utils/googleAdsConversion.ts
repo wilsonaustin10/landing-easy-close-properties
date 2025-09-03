@@ -52,7 +52,7 @@ export function waitForGtag(timeout = 5000): Promise<boolean> {
     let elapsed = 0;
     
     const check = setInterval(() => {
-      if (typeof window !== 'undefined' && window.gtag && window.dataLayer) {
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.dataLayer) {
         clearInterval(check);
         window.gtagReady = true;
         resolve(true);
@@ -66,7 +66,7 @@ export function waitForGtag(timeout = 5000): Promise<boolean> {
       }
     }, checkInterval);
     
-    if (typeof window !== 'undefined' && window.gtag && window.dataLayer) {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.dataLayer) {
       clearInterval(check);
       window.gtagReady = true;
       resolve(true);
@@ -184,6 +184,26 @@ export async function trackServerSideConversion(data: ServerConversionData): Pro
       return false;
     }
     
+    const userIdentifiers: Array<{
+      hashed_email?: string;
+      hashed_phone_number?: string;
+      user_identifier_source: string;
+    }> = [];
+    
+    if (data.email) {
+      userIdentifiers.push({
+        hashed_email: hashData(data.email),
+        user_identifier_source: 'FIRST_PARTY'
+      });
+    }
+    
+    if (data.phone) {
+      userIdentifiers.push({
+        hashed_phone_number: hashData(normalizePhoneNumber(data.phone)),
+        user_identifier_source: 'FIRST_PARTY'
+      });
+    }
+    
     const payload = {
       conversions: [{
         gclid: data.transactionId,
@@ -191,23 +211,9 @@ export async function trackServerSideConversion(data: ServerConversionData): Pro
         conversion_date_time: new Date().toISOString().replace('Z', '+00:00'),
         conversion_value: data.value || 1.0,
         currency_code: data.currency || 'USD',
-        user_identifiers: []
+        user_identifiers: userIdentifiers
       }]
     };
-    
-    if (data.email) {
-      payload.conversions[0].user_identifiers.push({
-        hashed_email: hashData(data.email),
-        user_identifier_source: 'FIRST_PARTY'
-      });
-    }
-    
-    if (data.phone) {
-      payload.conversions[0].user_identifiers.push({
-        hashed_phone_number: hashData(normalizePhoneNumber(data.phone)),
-        user_identifier_source: 'FIRST_PARTY'
-      });
-    }
     
     const response = await fetch(
       `https://googleads.googleapis.com/v15/customers/${process.env.GOOGLE_ADS_CUSTOMER_ID}:uploadOfflineUserDataJobs`,

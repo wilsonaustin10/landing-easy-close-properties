@@ -24,11 +24,6 @@ export default function RootLayout({
         <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=AW-17109864760"
-          onLoad={() => {
-            if (typeof window !== 'undefined') {
-              (window as any).gtagReady = true;
-            }
-          }}
         />
         <Script
           id="gtag-init"
@@ -43,6 +38,9 @@ export default function RootLayout({
               gtag('config', 'AW-17109864760', {
                 'allow_enhanced_conversions': true
               });
+              
+              // Mark gtag as ready
+              window.gtagReady = true;
               
               // Configure Google Analytics if available
               if ('${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}') {

@@ -5,7 +5,8 @@ import { rateLimit } from '@/utils/rateLimit';
 import { ghlIntegration } from '@/utils/ghlIntegration';
 import { numverifyClient } from '@/utils/numverify';
 import { googleSheetsClient, initializeGoogleSheets } from '@/utils/googleSheets';
-import { trackServerSideConversion, getConversionLabel } from '@/utils/googleAdsConversion';
+// Server-side conversion tracking imports - disabled by default
+// import { trackServerSideConversion, getConversionLabel } from '@/utils/googleAdsConversion';
 
 // Business form data interface
 interface BusinessFormData {

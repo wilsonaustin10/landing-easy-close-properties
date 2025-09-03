@@ -9,7 +9,7 @@ declare global {
 export const initializeAnalytics = () => {
   if (typeof window !== 'undefined') {
     // Check if gtag is already loaded
-    if (window.gtag && window.dataLayer) {
+    if (typeof window.gtag === 'function' && window.dataLayer) {
       window.gtagReady = true;
       return;
     }
