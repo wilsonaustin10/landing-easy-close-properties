@@ -58,15 +58,19 @@ GOOGLE_ADS_DEVELOPER_TOKEN=your_developer_token
 
 ## Conversion Labels
 
-You need to update the conversion labels with your actual Google Ads conversion IDs:
+Your conversion labels are now configured:
 
 1. **Property Lead Conversion**: 
-   - Current placeholder: `fLFZCLzz-fkYELD4yf8p`
-   - Update in: `.env` file as `NEXT_PUBLIC_PROPERTY_CONVERSION_LABEL`
+   - Label: `_wUiCO6H2pMbELiiz94_`
+   - Full conversion string: `AW-17109864760/_wUiCO6H2pMbELiiz94_`
+   - Set in: `.env` file as `NEXT_PUBLIC_PROPERTY_CONVERSION_LABEL`
 
 2. **Business Lead Conversion**:
-   - Current placeholder: `bIZqCM3z-fkYELD4yf8p`
-   - Update in: `.env` file as `NEXT_PUBLIC_BUSINESS_CONVERSION_LABEL`
+   - Label: `_wUiCO6H2pMbELiiz94_` (using same as property for now)
+   - Full conversion string: `AW-17109864760/_wUiCO6H2pMbELiiz94_`
+   - Set in: `.env` file as `NEXT_PUBLIC_BUSINESS_CONVERSION_LABEL`
+
+Note: If you have a separate conversion action for business leads, update `NEXT_PUBLIC_BUSINESS_CONVERSION_LABEL` with that specific label.
 
 ## Getting Your Conversion Labels
 
