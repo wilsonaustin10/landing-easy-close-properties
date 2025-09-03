@@ -60,17 +60,19 @@ GOOGLE_ADS_DEVELOPER_TOKEN=your_developer_token
 
 Your conversion labels are now configured:
 
-1. **Property Lead Conversion**: 
+1. **Property Lead Conversion** (Residential property sellers): 
    - Label: `_wUiCO6H2pMbELiiz94_`
    - Full conversion string: `AW-17109864760/_wUiCO6H2pMbELiiz94_`
    - Set in: `.env` file as `NEXT_PUBLIC_PROPERTY_CONVERSION_LABEL`
+   - Fires on: `/thank-you` page
 
-2. **Business Lead Conversion**:
-   - Label: `_wUiCO6H2pMbELiiz94_` (using same as property for now)
-   - Full conversion string: `AW-17109864760/_wUiCO6H2pMbELiiz94_`
+2. **Business Lead Conversion** (Business acquisition leads):
+   - Label: `4DprCPfG3ZMbELiiz94_`
+   - Full conversion string: `AW-17109864760/4DprCPfG3ZMbELiiz94_`
    - Set in: `.env` file as `NEXT_PUBLIC_BUSINESS_CONVERSION_LABEL`
+   - Fires on: `/sell-your-business/thank-you` page
 
-Note: If you have a separate conversion action for business leads, update `NEXT_PUBLIC_BUSINESS_CONVERSION_LABEL` with that specific label.
+These are separate conversion actions in Google Ads to track different lead types independently.
 
 ## Getting Your Conversion Labels
 
