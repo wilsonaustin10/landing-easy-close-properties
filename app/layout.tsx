@@ -1,14 +1,17 @@
-'use client';
-
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { FormProvider } from '../context/FormContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Script from 'next/script';
-import ReCaptchaProvider from '../components/ReCaptchaProvider';
+import ClientProviders from '../components/ClientProviders';
+import type { Metadata } from 'next';
 
 const inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: 'Easy Close Properties - We Buy Houses Fast',
+  description: 'Sell your house fast for cash. We buy houses in any condition. Get a fair cash offer today!',
+};
 
 export default function RootLayout({
   children,
@@ -21,6 +24,11 @@ export default function RootLayout({
         <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=AW-17109864760"
+          onLoad={() => {
+            if (typeof window !== 'undefined') {
+              (window as any).gtagReady = true;
+            }
+          }}
         />
         <Script
           id="gtag-init"
@@ -30,21 +38,28 @@ export default function RootLayout({
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'AW-17109864760');
+              
+              // Configure Google Ads with enhanced conversions
+              gtag('config', 'AW-17109864760', {
+                'allow_enhanced_conversions': true
+              });
+              
+              // Configure Google Analytics if available
+              if ('${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}') {
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
+              }
             `,
           }}
         />
       </head>
       <body className={inter.className}>
-        <ReCaptchaProvider>
-          <FormProvider>
-            <Header />
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
-          </FormProvider>
-        </ReCaptchaProvider>
+        <ClientProviders>
+          <Header />
+          <main className="flex-grow">
+            {children}
+          </main>
+          <Footer />
+        </ClientProviders>
         <Script
           src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&callback=initGoogleMaps`}
           strategy="lazyOnload"

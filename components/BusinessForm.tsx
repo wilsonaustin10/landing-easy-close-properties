@@ -162,6 +162,13 @@ export default function BusinessForm() {
         throw new Error('Failed to submit form');
       }
 
+      // Store form data in sessionStorage for conversion tracking on thank-you page
+      sessionStorage.setItem('businessFormData', JSON.stringify({
+        ...formData,
+        leadId,
+        annualRevenue: formData.annualRevenue.replace(/\D/g, '') // Extract numeric value
+      }));
+
       // Redirect to business thank you page
       window.location.href = '/sell-your-business/thank-you';
     } catch (err) {

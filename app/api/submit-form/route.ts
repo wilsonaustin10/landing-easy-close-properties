@@ -5,6 +5,7 @@ import { rateLimit } from '@/utils/rateLimit';
 import { ghlIntegration } from '@/utils/ghlIntegration';
 import { numverifyClient } from '@/utils/numverify';
 import { googleSheetsClient, initializeGoogleSheets } from '@/utils/googleSheets';
+import { trackServerSideConversion, getConversionLabel } from '@/utils/googleAdsConversion';
 
 // Business form data interface
 interface BusinessFormData {
@@ -281,6 +282,33 @@ export async function POST(request: Request) {
         // Don't fail the request if Google Sheets fails
       }
 
+      // Server-side conversion tracking DISABLED by default
+      // Only use this as a backup if client-side tracking fails
+      // Uncomment the code below ONLY if you're experiencing issues with thank-you page tracking
+      
+      /* BACKUP SERVER-SIDE TRACKING (DISABLED)
+      try {
+        // Only track if explicitly enabled via environment variable
+        if (process.env.ENABLE_SERVER_SIDE_CONVERSION === 'true') {
+          await trackServerSideConversion({
+            conversionLabel: getConversionLabel('business'),
+            value: parseInt(data.annualRevenue) || 1000000,
+            transactionId: data.leadId,
+            email: data.email,
+            phone: data.phone,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            userAgent: headersList.get('user-agent') || undefined,
+            ipAddress: ip,
+            acceptLanguage: headersList.get('accept-language') || undefined
+          });
+        }
+      } catch (error) {
+        console.error('Error tracking server-side business conversion:', error);
+        // Don't fail the request if conversion tracking fails
+      }
+      */
+
       return NextResponse.json({ 
         success: true,
         leadId: data.leadId,
@@ -310,6 +338,40 @@ export async function POST(request: Request) {
         console.error('Error sending property lead to Google Sheets:', error);
         // Don't fail the request if Google Sheets fails
       }
+
+      // Server-side conversion tracking DISABLED by default
+      // Only use this as a backup if client-side tracking fails
+      // Uncomment the code below ONLY if you're experiencing issues with thank-you page tracking
+      
+      /* BACKUP SERVER-SIDE TRACKING (DISABLED)
+      try {
+        // Only track if explicitly enabled via environment variable
+        if (process.env.ENABLE_SERVER_SIDE_CONVERSION === 'true') {
+          await trackServerSideConversion({
+            conversionLabel: getConversionLabel('property'),
+            value: parseInt(data.price) || 250000,
+            transactionId: data.leadId,
+            email: data.email,
+            phone: data.phone,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            userAgent: headersList.get('user-agent') || undefined,
+            ipAddress: ip,
+            acceptLanguage: headersList.get('accept-language') || undefined,
+            address: {
+              street: data.streetAddress,
+              city: data.city,
+              state: data.state,
+              postalCode: data.postalCode,
+              country: 'US'
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Error tracking server-side property conversion:', error);
+        // Don't fail the request if conversion tracking fails
+      }
+      */
 
       return NextResponse.json({ 
         success: true,

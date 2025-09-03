@@ -1,19 +1,63 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { useRouter } from 'next/navigation'; // Commented out as router is unused
 import { CheckCircle, Clock, Phone, ArrowRight } from 'lucide-react';
 import { trackEvent } from '../../utils/analytics';
+import { trackGoogleAdsConversion, getConversionLabel } from '../../utils/googleAdsConversion';
 
 export default function ThankYouPage() {
   // const router = useRouter(); // router is unused
+  const [formData, setFormData] = useState<any>(null);
 
   useEffect(() => {
     trackEvent('thank_you_page_view');
     
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'conversion', {
-        'send_to': 'AW-17109864760/fLFZCLzz-fkYELD4yf8p',
+    // Retrieve form data from sessionStorage for enhanced conversion tracking
+    const storedData = sessionStorage.getItem('formData');
+    if (storedData) {
+      try {
+        const data = JSON.parse(storedData);
+        setFormData(data);
+        
+        // Track conversion with enhanced data
+        trackGoogleAdsConversion({
+          conversionLabel: getConversionLabel('property'),
+          value: data.estimatedValue || 250000, // Use property value if available
+          transactionId: data.leadId || `lead_${Date.now()}`,
+          email: data.email,
+          phone: data.phone,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          address: {
+            street: data.streetAddress,
+            city: data.city,
+            state: data.state,
+            postalCode: data.postalCode,
+            country: 'US'
+          }
+        }).then(success => {
+          if (success) {
+            console.log('Enhanced conversion tracked successfully');
+            // Clear the stored data after successful tracking
+            sessionStorage.removeItem('formData');
+          }
+        });
+      } catch (error) {
+        console.error('Error parsing stored form data:', error);
+        // Fallback to basic conversion tracking
+        trackGoogleAdsConversion({
+          conversionLabel: getConversionLabel('property'),
+          value: 250000, // Default value for property leads
+          transactionId: `lead_${Date.now()}`
+        });
+      }
+    } else {
+      // Fallback to basic conversion tracking if no stored data
+      trackGoogleAdsConversion({
+        conversionLabel: getConversionLabel('property'),
+        value: 250000, // Default value for property leads
+        transactionId: `lead_${Date.now()}`
       });
     }
   }, []);

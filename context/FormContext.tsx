@@ -51,10 +51,15 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
   const [currentStep, setCurrentStep] = useState<FormStep>('initial');
   const [errors, setErrors] = useState<FormErrors>({});
 
-  // Persist form data to localStorage
+  // Persist form data to localStorage and sessionStorage for conversion tracking
   useEffect(() => {
     if (typeof window !== 'undefined' && !formState.isSubmitting) {
       localStorage.setItem('leadFormData', JSON.stringify(formState));
+      // Also store in sessionStorage for thank-you page conversion tracking
+      sessionStorage.setItem('formData', JSON.stringify({
+        ...formState,
+        estimatedValue: formState.price ? parseInt(formState.price.replace(/\D/g, '')) : undefined
+      }));
     }
   }, [formState]);
 

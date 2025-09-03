@@ -1,17 +1,55 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CheckCircle, Clock, Phone, Shield, Users } from 'lucide-react';
 import { trackEvent } from '../../../utils/analytics';
+import { trackGoogleAdsConversion, getConversionLabel } from '../../../utils/googleAdsConversion';
 import CalendarScheduler from '../../../components/CalendarScheduler';
 
 export default function BusinessThankYouPage() {
+  const [formData, setFormData] = useState<any>(null);
+
   useEffect(() => {
     trackEvent('business_thank_you_page_view');
     
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'conversion', {
-        'send_to': 'AW-17109864760/business-conversion-id', // Update with actual conversion ID
+    // Retrieve business form data from sessionStorage for enhanced conversion tracking
+    const storedData = sessionStorage.getItem('businessFormData');
+    if (storedData) {
+      try {
+        const data = JSON.parse(storedData);
+        setFormData(data);
+        
+        // Track conversion with enhanced data
+        trackGoogleAdsConversion({
+          conversionLabel: getConversionLabel('business'),
+          value: parseInt(data.annualRevenue) || 1000000, // Use annual revenue as value
+          transactionId: data.leadId || `business_${Date.now()}`,
+          email: data.email,
+          phone: data.phone,
+          firstName: data.firstName,
+          lastName: data.lastName
+        }).then(success => {
+          if (success) {
+            console.log('Business conversion tracked successfully');
+            // Clear the stored data after successful tracking
+            sessionStorage.removeItem('businessFormData');
+          }
+        });
+      } catch (error) {
+        console.error('Error parsing stored business form data:', error);
+        // Fallback to basic conversion tracking
+        trackGoogleAdsConversion({
+          conversionLabel: getConversionLabel('business'),
+          value: 1000000, // Default value for business leads
+          transactionId: `business_${Date.now()}`
+        });
+      }
+    } else {
+      // Fallback to basic conversion tracking if no stored data
+      trackGoogleAdsConversion({
+        conversionLabel: getConversionLabel('business'),
+        value: 1000000, // Default value for business leads
+        transactionId: `business_${Date.now()}`
       });
     }
   }, []);

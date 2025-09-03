@@ -2,15 +2,33 @@ declare global {
   interface Window {
     dataLayer: any[];
     gtag: (...args: any[]) => void;
+    gtagReady?: boolean;
   }
 }
 
 export const initializeAnalytics = () => {
   if (typeof window !== 'undefined') {
+    // Check if gtag is already loaded
+    if (window.gtag && window.dataLayer) {
+      window.gtagReady = true;
+      return;
+    }
+
     const script = document.createElement('script');
     const gaId = process.env.NEXT_PUBLIC_GA_ID;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
     script.async = true;
+    
+    // Set up load handler to mark gtag as ready
+    script.onload = () => {
+      window.gtagReady = true;
+      console.log('Google Analytics loaded successfully');
+    };
+    
+    script.onerror = () => {
+      console.error('Failed to load Google Analytics');
+    };
+    
     document.head.appendChild(script);
 
     window.dataLayer = window.dataLayer || [];
@@ -21,10 +39,11 @@ export const initializeAnalytics = () => {
     window.gtag('js', new Date());
     window.gtag('config', gaId);
     
-    // Also configure Google Ads tag
-    if (process.env.NEXT_PUBLIC_GOOGLE_ADS_ID) {
-      window.gtag('config', process.env.NEXT_PUBLIC_GOOGLE_ADS_ID);
-    }
+    // Configure Google Ads tag with enhanced conversions
+    const googleAdsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || 'AW-17109864760';
+    window.gtag('config', googleAdsId, {
+      allow_enhanced_conversions: true
+    });
   }
 };
 
