@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useGoogleMaps } from './useGoogleMaps';
 
 declare global {
   namespace google.maps.places {
@@ -30,6 +31,8 @@ export function useGooglePlaces(
 ) {
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const sessionTokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(null);
+  const { isLoaded, loadGoogleMaps } = useGoogleMaps();
+  const hasInitiatedLoad = useRef(false);
 
   useEffect(() => {
     // If readOnly is true, or dependencies are not ready, do not initialize
@@ -40,7 +43,27 @@ export function useGooglePlaces(
       return;
     }
 
-    // Wait for Google Maps to be loaded
+    // Lazy load Google Maps on first focus
+    const handleFocus = () => {
+      if (!hasInitiatedLoad.current && !isLoaded) {
+        hasInitiatedLoad.current = true;
+        loadGoogleMaps();
+      }
+    };
+
+    inputRef.current?.addEventListener('focus', handleFocus, { once: true });
+
+    return () => {
+      inputRef.current?.removeEventListener('focus', handleFocus);
+    };
+  }, [readOnly, loadGoogleMaps, isLoaded]);
+
+  useEffect(() => {
+    if (!isLoaded || readOnly || !inputRef.current) {
+      return;
+    }
+
+    // Initialize autocomplete once Maps is loaded
     const initAutocomplete = () => {
       if (!window.google?.maps?.places || !inputRef.current) {
         return;
@@ -114,5 +137,5 @@ export function useGooglePlaces(
         sessionTokenRef.current = null;
       };
     }
-  }, [inputRef, onAddressSelect, readOnly]);
+  }, [inputRef, onAddressSelect, readOnly, isLoaded]);
 } 

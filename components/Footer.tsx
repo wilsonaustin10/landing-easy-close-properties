@@ -28,15 +28,17 @@ export default function Footer() {
                 width={100}
                 height={26}
                 className="mr-2"
+                loading="lazy"
+                quality={85}
               />
             </div>
-            <p className="text-white/90">
+            <p className="text-white">
               We buy houses in any condition. Get your fair cash offer today.
             </p>
             <div className="space-y-2">
               <a 
                 href="tel: (302) 592-3436"
-                className="flex items-center space-x-2 text-white/80 hover:text-red-400 transition-colors"
+                className="flex items-center space-x-2 text-white hover:text-red-400 transition-colors"
               >
                 <Phone className="h-4 w-4" />
                 <span>(302) 592-3436</span>
@@ -49,22 +51,22 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/#how-it-works" className="text-white/80 hover:text-red-400 transition-colors">
+                <Link href="/#how-it-works" className="text-white hover:text-red-400 transition-colors">
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-white/80 hover:text-red-400 transition-colors">
+                <Link href="/about" className="text-white hover:text-red-400 transition-colors">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/#testimonials" className="text-white/80 hover:text-red-400 transition-colors">
+                <Link href="/#testimonials" className="text-white hover:text-red-400 transition-colors">
                   Testimonials
                 </Link>
               </li>
               <li>
-                <Link href="/sell-your-business" className="text-white/80 hover:text-red-400 transition-colors">
+                <Link href="/sell-your-business" className="text-white hover:text-red-400 transition-colors">
                   Sell Your Business
                 </Link>
               </li>
@@ -75,12 +77,12 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Specializing In</h3>
             <ul className="space-y-2">
-              <li className="text-white/80">Pre-Foreclosure</li>
-              <li className="text-white/80">Divorce</li>
-              <li className="text-white/80">Storm Damage</li>
-              <li className="text-white/80">Tax Liens</li>
-              <li className="text-white/80">Bad Tenants</li>
-              <li className="text-white/80">Code Violations</li>
+              <li className="text-white">Pre-Foreclosure</li>
+              <li className="text-white">Divorce</li>
+              <li className="text-white">Storm Damage</li>
+              <li className="text-white">Tax Liens</li>
+              <li className="text-white">Bad Tenants</li>
+              <li className="text-white">Code Violations</li>
             </ul>
           </div>
 
