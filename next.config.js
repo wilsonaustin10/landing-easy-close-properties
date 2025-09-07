@@ -9,6 +9,31 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   swcMinify: true,
+  // Configure SWC to target modern browsers only
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  // Webpack configuration to reduce polyfills
+  webpack: (config, { isServer }) => {
+    // Skip polyfills for modern browser features
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'core-js/modules/es.array.at': false,
+      'core-js/modules/es.array.flat': false,
+      'core-js/modules/es.array.flat-map': false,
+      'core-js/modules/es.object.from-entries': false,
+      'core-js/modules/es.object.has-own': false,
+      'core-js/modules/es.string.trim-end': false,
+      'core-js/modules/es.string.trim-start': false,
+    };
+    
+    // Target modern JavaScript
+    if (!isServer) {
+      config.target = ['web', 'es2020'];
+    }
+    
+    return config;
+  },
   // Configure image domains if needed
   images: {
     domains: ['localhost', 'offer.goservebig.com'],

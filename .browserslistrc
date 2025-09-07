@@ -1,0 +1,17 @@
+# Target only modern browsers that support ES6+ features
+# This eliminates unnecessary polyfills for features like:
+# - Array.prototype.at
+# - Array.prototype.flat/flatMap
+# - Object.fromEntries/hasOwn
+# - String.prototype.trimStart/trimEnd
+
+# Modern browser targets (ES2020+ support)
+defaults and supports es6-module
+not dead
+not op_mini all
+not ie 11
+not safari < 14
+not ios_saf < 14
+not chrome < 90
+not firefox < 88
+not edge < 90
