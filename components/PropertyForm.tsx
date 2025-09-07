@@ -193,9 +193,12 @@ export default function PropertyForm() {
         <div className="space-y-4">
           <h2 className="text-xl font-semibold text-gray-800">Enter Your Phone Number</h2>
           <div className="space-y-1">
+            <label htmlFor="phone-input" className="sr-only">Phone Number</label>
             <input
+              id="phone-input"
               type="tel"
               placeholder="(555) 555-5555"
+              aria-label="Phone number"
               className={`w-full px-4 py-3 text-lg border rounded-lg transition-colors
                 ${errors.phone && touched.phone 
                   ? 'border-red-500 focus:ring-red-500' 
@@ -221,14 +224,17 @@ export default function PropertyForm() {
           <div className="space-y-2">
             <label className="flex items-start space-x-3">
               <input
+                id="consent-checkbox"
                 type="checkbox"
                 className="mt-1 h-4 w-4 text-secondary border-gray-300 rounded focus:ring-secondary"
                 checked={formState.consent || false}
                 onChange={(e) => updateFormData({ consent: e.target.checked })}
                 onBlur={() => handleBlur('consent')}
+                aria-required="true"
+                aria-describedby="consent-description"
                 required
               />
-              <span className="text-sm text-gray-600">
+              <span id="consent-description" className="text-sm text-gray-600">
                 By checking this box, I consent to being contacted by phone, email, or text message about my property sale inquiry, including through auto-dialed or pre-recorded messages.
               </span>
             </label>

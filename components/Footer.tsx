@@ -23,13 +23,14 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="flex items-center">
               <Image
-                src="/Easy Close Properties Transparent.png"
+                src="/Easy Close Properties Transparent.webp"
                 alt="Easy Close Properties"
                 width={100}
                 height={26}
                 className="mr-2"
                 loading="lazy"
                 quality={85}
+                sizes="100px"
               />
             </div>
             <p className="text-white">

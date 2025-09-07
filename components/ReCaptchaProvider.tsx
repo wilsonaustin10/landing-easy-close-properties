@@ -21,10 +21,10 @@ const ReCaptchaProvider = ({ children }: { children: React.ReactNode }) => {
     <GoogleReCaptchaProvider
       reCaptchaKey={recaptchaSiteKey}
       scriptProps={{
-        async: false, // Use 'false' if you need the script to load synchronously
-        defer: false, // Use 'false' with async: false
-        appendTo: "head",
-        nonce: undefined, // You can provide a nonce if you have a CSP
+        async: true,
+        defer: true,
+        appendTo: "body",
+        nonce: undefined,
       }}
     >
       {children}

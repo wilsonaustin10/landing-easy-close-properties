@@ -10,16 +10,16 @@ export default function Header() {
         <div className="flex items-center justify-between gap-2">
           <Link href="/" className="flex-shrink-0">
             <Image
-              src="/Easy Close Properties Logo.jpeg"
+              src="/Easy Close Properties Logo.webp"
               alt="Easy Close Properties"
               width={160}
               height={42}
-              style={{ objectFit: 'contain' }}
+              sizes="(max-width: 640px) 120px, (max-width: 768px) 140px, 160px"
               priority
               className="hover:opacity-90 transition-opacity w-[120px] sm:w-[140px] md:w-[160px] h-auto"
               quality={85}
               placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAKACADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAhEAACAQQABwAAAAAAAAAAAAABAgMABAUREiEiMTJBUf/EABUBAQEAAAAAAAAAAAAAAAAAAAME/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEQMhMf/aAAwDAQACEQMRAD8AlsNgRJMsk8YkhPkD71vR+VYWNxJLkUEKxu4PRo6HIdq1KlQKf//Z"
+              blurDataURL="data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAAAwAgCdASoKABgAAkA4JZwAAjnAAP7+FgAA"
             />
           </Link>
           <nav className="hidden md:flex space-x-8">

@@ -1,10 +1,8 @@
 import React from 'react';
 import PropertyForm from '../components/PropertyForm';
-import Testimonials from '../components/Testimonials';
-// import TrustBadges from '../components/TrustBadges';  // Kept for future use
-// import { CheckCircle } from 'lucide-react';
 import { Benefits } from '../components/Benefits';
 import { HowItWorks } from '../components/HowItWorks';
+import LazyTestimonials from '../components/LazyTestimonials';
 
 export default function Home() {
   return (
@@ -64,7 +62,7 @@ export default function Home() {
       
       {/* Testimonials Section */}
       <section id="testimonials" className="py-16 px-4 bg-gray-100">
-        <Testimonials />
+        <LazyTestimonials />
       </section>
     </main>
   );
