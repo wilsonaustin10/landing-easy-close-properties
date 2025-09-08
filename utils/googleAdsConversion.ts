@@ -269,7 +269,7 @@ export function initializeEnhancedConversions(): void {
 
 export function getConversionLabel(type: 'property' | 'business'): string {
   const labels = {
-    property: process.env.NEXT_PUBLIC_PROPERTY_CONVERSION_LABEL || 'fLFZCLzz-fkYELD4yf8p',
+    property: process.env.NEXT_PUBLIC_PROPERTY_CONVERSION_LABEL || '_wUiCO6H2pMbELiiz94_',
     business: process.env.NEXT_PUBLIC_BUSINESS_CONVERSION_LABEL || 'bIZqCM3z-fkYELD4yf8p'
   };
   

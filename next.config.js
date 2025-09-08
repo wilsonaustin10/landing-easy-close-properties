@@ -53,7 +53,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: `frame-ancestors 'self' https://offer.goservebig.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.googletagmanager.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;`
+            value: `frame-ancestors 'self' https://offer.goservebig.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.googletagmanager.com https://*.googleadservices.com https://*.googlesyndication.com https://*.doubleclick.net; script-src-elem 'self' 'unsafe-inline' https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.googletagmanager.com https://*.googleadservices.com https://*.googlesyndication.com https://*.doubleclick.net https://googleads.g.doubleclick.net; img-src 'self' data: https: https://*.google.com https://*.googleadservices.com https://*.googlesyndication.com https://*.doubleclick.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; connect-src 'self' https://*.google.com https://*.googleapis.com https://*.gstatic.com https://*.googletagmanager.com https://*.google-analytics.com https://*.googleadservices.com https://*.googlesyndication.com https://*.doubleclick.net https://googleads.g.doubleclick.net;`
           },
           {
             key: 'X-Frame-Options',
