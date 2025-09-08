@@ -27,12 +27,12 @@ export default function ThankYouPage() {
   useEffect(() => {
     trackEvent('thank_you_page_view');
     
-    // Fire the ECP Full Lead conversion event - using the label detected by Tag Assistant
+    // Fire the ECP Full Lead conversion event - using the correct label
     if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
       window.gtag('event', 'conversion', {
-        'send_to': 'AW-17109864760/cwbwCKyC0YcbELiiz94_'
+        'send_to': 'AW-17109864760/_wUiCO6H2pMbELiiz94_'
       });
-      console.log('Submit lead form conversion event fired (cwbwCKyC0YcbELiiz94_)');
+      console.log('Submit lead form conversion event fired (_wUiCO6H2pMbELiiz94_)');
     }
     
     // Retrieve form data from sessionStorage for enhanced conversion tracking
