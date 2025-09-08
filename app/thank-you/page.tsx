@@ -27,6 +27,14 @@ export default function ThankYouPage() {
   useEffect(() => {
     trackEvent('thank_you_page_view');
     
+    // Fire the ECP Full Lead conversion event
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'conversion', {
+        'send_to': 'AW-17109864760/_wUiCO6H2pMbELiiz94_'
+      });
+      console.log('ECP Full Lead conversion event fired');
+    }
+    
     // Retrieve form data from sessionStorage for enhanced conversion tracking
     const storedData = sessionStorage.getItem('formData');
     if (storedData) {
