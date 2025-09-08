@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import Script from 'next/script';
 import ClientProviders from '../components/ClientProviders';
 import { criticalCSS } from '../lib/critical-css';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 
 const inter = Inter({ 
@@ -85,6 +86,7 @@ export default function RootLayout({
           </main>
           <Footer />
         </ClientProviders>
+        <SpeedInsights />
       </body>
     </html>
   );
