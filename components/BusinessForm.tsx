@@ -71,6 +71,13 @@ export default function BusinessForm() {
 
   const { executeRecaptcha } = useGoogleReCaptcha();
 
+  // Clear business conversion tracking flag when starting a new form
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('business_conversion_tracked');
+    }
+  }, []);
+
   const totalSteps = 5;
   const progress = (step / totalSteps) * 100;
 

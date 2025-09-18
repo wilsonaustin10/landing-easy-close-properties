@@ -23,6 +23,13 @@ export default function PropertyForm() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
+  // Clear conversion tracking flag when starting a new form
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('conversion_tracked');
+    }
+  }, []);
+
   const validatePhone = (phone: string): boolean => {
     const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
     return phoneRegex.test(phone);

@@ -22,18 +22,28 @@ export default function BusinessThankYouPage() {
   useEffect(() => {
     trackEvent('business_thank_you_page_view');
     
+    // Check if business conversion was already tracked to prevent duplicates
+    const businessConversionTracked = sessionStorage.getItem('business_conversion_tracked');
+    if (businessConversionTracked) {
+      console.log('Business conversion already tracked, skipping duplicate');
+      return;
+    }
+    
     // Retrieve business form data from sessionStorage for enhanced conversion tracking
     const storedData = sessionStorage.getItem('businessFormData');
+    let transactionId = `business_${Date.now()}`;
+    
     if (storedData) {
       try {
         const data = JSON.parse(storedData);
         setFormData(data);
+        transactionId = data.leadId || transactionId;
         
-        // Track conversion with enhanced data
+        // Track conversion with enhanced data - ONLY ONCE
         trackGoogleAdsConversion({
           conversionLabel: getConversionLabel('business'),
           value: 10, // $10 per qualified lead
-          transactionId: data.leadId || `business_${Date.now()}`,
+          transactionId: transactionId,
           email: data.email,
           phone: data.phone,
           firstName: data.firstName,
@@ -41,6 +51,8 @@ export default function BusinessThankYouPage() {
         }).then(success => {
           if (success) {
             console.log('Business conversion tracked successfully');
+            // Mark business conversion as tracked to prevent duplicates
+            sessionStorage.setItem('business_conversion_tracked', 'true');
             // Clear the stored data after successful tracking
             sessionStorage.removeItem('businessFormData');
           }
@@ -51,7 +63,12 @@ export default function BusinessThankYouPage() {
         trackGoogleAdsConversion({
           conversionLabel: getConversionLabel('business'),
           value: 10, // $10 per qualified lead
-          transactionId: `business_${Date.now()}`
+          transactionId: transactionId
+        }).then(success => {
+          if (success) {
+            // Mark business conversion as tracked
+            sessionStorage.setItem('business_conversion_tracked', 'true');
+          }
         });
       }
     } else {
@@ -59,7 +76,12 @@ export default function BusinessThankYouPage() {
       trackGoogleAdsConversion({
         conversionLabel: getConversionLabel('business'),
         value: 10, // $10 per qualified lead
-        transactionId: `business_${Date.now()}`
+        transactionId: transactionId
+      }).then(success => {
+        if (success) {
+          // Mark business conversion as tracked
+          sessionStorage.setItem('business_conversion_tracked', 'true');
+        }
       });
     }
   }, []);

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 // import { useRouter } from 'next/navigation'; // Commented out as router is unused
 import { CheckCircle, Clock, Phone, ArrowRight } from 'lucide-react';
 import { trackEvent } from '../../utils/analytics';
-import { trackGoogleAdsConversion, getConversionLabel } from '../../utils/googleAdsConversion';
+import { trackGoogleAdsConversion } from '../../utils/googleAdsConversion';
 
 interface FormData {
   leadId?: string;
@@ -27,26 +27,28 @@ export default function ThankYouPage() {
   useEffect(() => {
     trackEvent('thank_you_page_view');
     
-    // Fire the ECP Full Lead conversion event - using the correct label
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-      window.gtag('event', 'conversion', {
-        'send_to': 'AW-17109864760/_wUiCO6H2pMbELiiz94_'
-      });
-      console.log('Submit lead form conversion event fired (_wUiCO6H2pMbELiiz94_)');
+    // Check if conversion was already tracked to prevent duplicates
+    const conversionTracked = sessionStorage.getItem('conversion_tracked');
+    if (conversionTracked) {
+      console.log('Conversion already tracked, skipping duplicate');
+      return;
     }
     
     // Retrieve form data from sessionStorage for enhanced conversion tracking
     const storedData = sessionStorage.getItem('formData');
+    let transactionId = `lead_${Date.now()}`;
+    
     if (storedData) {
       try {
         const data = JSON.parse(storedData);
         setFormData(data);
+        transactionId = data.leadId || transactionId;
         
-        // Track conversion with enhanced data
+        // Track conversion with enhanced data - ONLY ONCE
         trackGoogleAdsConversion({
-          conversionLabel: getConversionLabel('property'),
+          conversionLabel: '_wUiCO6H2pMbELiiz94_', // Use the direct conversion label
           value: 10, // $10 per qualified lead
-          transactionId: data.leadId || `lead_${Date.now()}`,
+          transactionId: transactionId,
           email: data.email,
           phone: data.phone,
           firstName: data.firstName,
@@ -61,6 +63,8 @@ export default function ThankYouPage() {
         }).then(success => {
           if (success) {
             console.log('Enhanced conversion tracked successfully');
+            // Mark conversion as tracked to prevent duplicates
+            sessionStorage.setItem('conversion_tracked', 'true');
             // Clear the stored data after successful tracking
             sessionStorage.removeItem('formData');
           }
@@ -68,19 +72,27 @@ export default function ThankYouPage() {
       } catch (error) {
         console.error('Error parsing stored form data:', error);
         // Fallback to basic conversion tracking
-        trackGoogleAdsConversion({
-          conversionLabel: getConversionLabel('property'),
-          value: 10, // $10 per qualified lead
-          transactionId: `lead_${Date.now()}`
-        });
+        if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+          window.gtag('event', 'conversion', {
+            'send_to': 'AW-17109864760/_wUiCO6H2pMbELiiz94_',
+            'transaction_id': transactionId
+          });
+          console.log('Basic conversion event fired');
+          // Mark conversion as tracked
+          sessionStorage.setItem('conversion_tracked', 'true');
+        }
       }
     } else {
       // Fallback to basic conversion tracking if no stored data
-      trackGoogleAdsConversion({
-        conversionLabel: getConversionLabel('property'),
-        value: 10, // $10 per qualified lead
-        transactionId: `lead_${Date.now()}`
-      });
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+        window.gtag('event', 'conversion', {
+          'send_to': 'AW-17109864760/_wUiCO6H2pMbELiiz94_',
+          'transaction_id': transactionId
+        });
+        console.log('Basic conversion event fired (no stored data)');
+        // Mark conversion as tracked
+        sessionStorage.setItem('conversion_tracked', 'true');
+      }
     }
   }, []);
 
