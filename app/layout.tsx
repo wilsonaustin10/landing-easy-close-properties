@@ -2,10 +2,10 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import Script from 'next/script';
 import ClientProviders from '../components/ClientProviders';
 import { criticalCSS } from '../lib/critical-css';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import OptimizedScripts from '../components/OptimizedScripts';
 import type { Metadata } from 'next';
 
 const inter = Inter({ 
@@ -48,35 +48,6 @@ export default function RootLayout({
         {/* Prefetch non-critical resources */}
         <link rel="prefetch" href="/api/submit-partial" />
         <link rel="prefetch" href="/api/submit-form" />
-        
-        <Script
-          strategy="lazyOnload"
-          src="https://www.googletagmanager.com/gtag/js?id=AW-17109864760"
-        />
-        <Script
-          id="gtag-init"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              
-              // Configure Google Ads with enhanced conversions
-              gtag('config', 'AW-17109864760', {
-                'allow_enhanced_conversions': true
-              });
-              
-              // Mark gtag as ready
-              window.gtagReady = true;
-              
-              // Configure Google Analytics if available
-              if ('${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}') {
-                gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
-              }
-            `,
-          }}
-        />
       </head>
       <body className={`${inter.variable} font-sans`}>
         <ClientProviders>
@@ -87,6 +58,7 @@ export default function RootLayout({
           <Footer />
         </ClientProviders>
         <SpeedInsights />
+        <OptimizedScripts />
       </body>
     </html>
   );
