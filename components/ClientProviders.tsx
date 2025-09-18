@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FormProvider } from '../context/FormContext';
-import ReCaptchaProvider from './ReCaptchaProvider';
+import LazyReCaptchaProvider from './LazyReCaptchaProvider';
 
 export default function ClientProviders({
   children,
@@ -10,10 +10,10 @@ export default function ClientProviders({
   children: React.ReactNode;
 }) {
   return (
-    <ReCaptchaProvider>
+    <LazyReCaptchaProvider>
       <FormProvider>
         {children}
       </FormProvider>
-    </ReCaptchaProvider>
+    </LazyReCaptchaProvider>
   );
 }
