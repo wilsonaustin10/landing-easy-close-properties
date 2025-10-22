@@ -12,10 +12,10 @@ export default function PropertyListedPage() {
   const { updateFormData } = useForm();
 
   useEffect(() => {
-    // Track partial lead conversion when user reaches this page
+    // Track lead progression when user reaches this page
     trackEvent('property_listed_page_view');
-    
-    // Google Ads conversion tracking for partial lead
+
+    // Google Ads conversion tracking for initial lead conversion
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'conversion', {
         'send_to': 'AW-17109864760/sghECKX6-fkYELD4yf8p',

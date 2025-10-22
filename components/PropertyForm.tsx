@@ -94,14 +94,14 @@ export default function PropertyForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate form before submission
     const validationErrors: Record<string, string> = {};
-    
+
     if (!formState.address?.trim()) {
       validationErrors.address = 'Address is required';
     }
-    
+
     if (!formState.phone?.trim()) {
       validationErrors.phone = 'Phone number is required';
     } else if (!/^\(\d{3}\) \d{3}-\d{4}$/.test(formState.phone)) {
@@ -121,52 +121,22 @@ export default function PropertyForm() {
     setErrors({});
 
     try {
-      const dataToSubmit = {
-        ...formState,
-        lastUpdated: new Date().toISOString()
-      };
+      const leadId = formState.leadId || (typeof crypto !== 'undefined' && 'randomUUID' in crypto
+        ? crypto.randomUUID()
+        : `lead-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`);
 
-      console.log('Submitting form data:', {
-        address: dataToSubmit.address,
-        phone: dataToSubmit.phone,
-        consent: dataToSubmit.consent
+      updateFormData({
+        leadId,
+        submissionType: 'complete',
+        lastUpdated: new Date().toISOString(),
       });
 
-      const response = await fetch('/api/submit-partial', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataToSubmit)
-      });
-
-      let result;
-      try {
-        const text = await response.text();
-        result = text ? JSON.parse(text) : {};
-        if (!response.ok) {
-          console.error('API error response:', text);
-          throw new Error(`API error: ${response.status} ${response.statusText}`);
-        }
-      } catch (parseError) {
-        console.error('Error parsing API response:', parseError);
-        throw new Error(`Failed to parse API response: ${response.status} ${response.statusText}`);
-      }
-      
-      if (!result.success) {
-        throw new Error(result.error || 'Failed to save lead data');
-      }
-
-      // Store leadId in form state for later use
-      updateFormData({ leadId: result.leadId });
-
-      trackEvent('form_submitted', { 
+      trackEvent('form_submitted', {
         address: formState.address,
         hasPhone: !!formState.phone
       });
 
       router.push('/property-listed');
-
     } catch (error) {
       console.error('Form submission error:', error);
       setErrors(prev => ({
