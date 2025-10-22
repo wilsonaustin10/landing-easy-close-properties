@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
+import { randomUUID } from 'crypto';
 import { LeadFormData } from '@/types';
 import { rateLimit } from '@/utils/rateLimit';
 import { ghlIntegration } from '@/utils/ghlIntegration';
@@ -32,9 +33,8 @@ function validatePropertyFormData(data: Partial<LeadFormData>): data is LeadForm
 
   // Required fields validation
   const requiredFields: (keyof LeadFormData)[] = [
-    'address', 'phone', 'firstName', 'lastName', 
-    'email', 'propertyCondition', 'timeframe', 'price',
-    'leadId'
+    'address', 'phone', 'firstName', 'lastName',
+    'email', 'propertyCondition', 'timeframe', 'price'
   ];
   
   for (const field of requiredFields) {
@@ -324,6 +324,10 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
+
+      const leadId = data.leadId?.trim() || randomUUID();
+      data.leadId = leadId;
+      data.submissionType = 'complete';
 
       // Send to Zapier webhook
       await sendToZapier(data);

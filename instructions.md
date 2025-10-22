@@ -5,8 +5,8 @@ The lead capture system is implemented as a two-step process to maximize lead co
 
 ## Initial Lead Capture
 1. Component: `PropertyForm.tsx`
-2. Endpoint: `/api/submit-partial`
-3. Function: Creates new lead in Google Sheets
+2. Lead ID: Generated client-side
+3. Function: Collects initial data and primes context for full submission
 4. Required Fields:
    - Property Address
    - Phone Number
@@ -18,15 +18,14 @@ The lead capture system is implemented as a two-step process to maximize lead co
 3. User accepts contact consent
 4. On "Get Cash Offer" click:
    - Validates required fields
-   - Generates unique leadId
-   - Creates new row in Google Sheets
+   - Generates unique leadId client-side
    - Stores leadId in form state
    - Redirects to property details
 
 ## Complete Lead Submission
 1. Component: `Contact/page.tsx`
 2. Endpoint: `/api/submit-form`
-3. Function: Updates existing lead in Google Sheets
+3. Function: Creates or updates lead entry in Google Sheets and CRM integrations
 4. Required Fields:
    - First Name
    - Last Name
@@ -38,10 +37,9 @@ The lead capture system is implemented as a two-step process to maximize lead co
 ### Flow
 1. User completes all form steps
 2. On final submission:
-   - Uses stored leadId
+   - Uses stored leadId (or generates one server-side if missing)
    - Validates all required fields
-   - Updates existing row in Google Sheets
-   - No duplicate rows created
+   - Upserts lead data in Google Sheets
    - Redirects to thank you page
 
 ## Google Sheets Integration

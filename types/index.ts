@@ -26,7 +26,7 @@ export interface LeadFormData {
   timestamp?: string;
   lastUpdated?: string;
   leadId?: string;
-  submissionType?: 'partial' | 'complete';
+  submissionType?: 'complete';
 }
 
 export interface FormState extends LeadFormData {

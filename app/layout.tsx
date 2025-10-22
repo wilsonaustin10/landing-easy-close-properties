@@ -48,7 +48,6 @@ export default function RootLayout({
               href="/_next/static/media/c9a5bc6a7c948fb0-s.p.woff2" />
         
         {/* Prefetch non-critical resources */}
-        <link rel="prefetch" href="/api/submit-partial" />
         <link rel="prefetch" href="/api/submit-form" />
       </head>
       <body className={`${inter.variable} font-sans`}>
