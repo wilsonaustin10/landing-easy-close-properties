@@ -212,7 +212,7 @@ export default function PropertyForm() {
                 required
               />
               <span id="consent-description" className="text-sm text-gray-600">
-                By checking this box, I consent to being contacted by phone, email, or text message about my property sale inquiry, including through auto-dialed or pre-recorded messages.
+                By checking this box, I consent to being contacted by phone, email, or text message about my property sale inquiry. I understand that calls may be made using an automated telephone dialing system, artificial intelligence, or pre-recorded/artificial voice messages. Message and data rates may apply.
               </span>
             </label>
             {errors.consent && touched.consent && (

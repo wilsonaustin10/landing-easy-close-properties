@@ -239,7 +239,7 @@ export default function LandingBPage() {
               </div>
               <div className="ml-3 text-sm">
                 <label htmlFor="consent" className="font-medium text-gray-700">
-                  I agree to be contacted about my property.
+                  I agree to be contacted about my property by phone, email, or text. I understand that calls may be made using an automated system, artificial intelligence, or pre-recorded/artificial voice messages.
                 </label>
                 {localErrors.consent && <p className="mt-1 text-xs text-red-600">{localErrors.consent}</p>}
               </div>

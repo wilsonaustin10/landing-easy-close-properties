@@ -77,7 +77,7 @@ export default function PropertyListedPage() {
             <p className="text-center text-gray-600 leading-relaxed">
               Life is hard enough without having to worry about trying to sell your home. 
               We do everything possible to make selling your home as convenient and stress-free as possible. 
-              After you&apos;ve completed the form above, we&apos;ll give you a call to determine the best solution for your situation.
+              After you&apos;ve completed the form above, our automated system will give you a call to determine the best solution for your situation.
             </p>
           </div>
         </div>
