@@ -3,19 +3,15 @@ interface GHLContact {
   lastName: string;
   email: string;
   phone: string;
-  customField?: Record<string, any>;
+  address1?: string;
+  customFields?: Array<{ id: string; field_value: string }>;
   tags?: string[];
-  notes?: string;
+  source?: string;
 }
 
-interface GHLOpportunity {
-  name: string;
-  pipelineId: string;
-  pipelineStageId: string;
+interface GHLNote {
   contactId: string;
-  monetaryValue?: number;
-  customFields?: Record<string, any>;
-  notes?: string;
+  body: string;
 }
 
 export class GHLIntegration {
@@ -23,7 +19,7 @@ export class GHLIntegration {
   private locationId: string;
   private pipelineId: string;
   private stageId: string;
-  private baseUrl = 'https://rest.gohighlevel.com/v1';
+  private baseUrl = 'https://services.leadconnectorhq.com';
 
   constructor() {
     this.apiKey = process.env.GHL_API_KEY || '';
@@ -40,6 +36,7 @@ export class GHLIntegration {
     return {
       'Authorization': `Bearer ${this.apiKey}`,
       'Content-Type': 'application/json',
+      'Version': '2021-07-28',
     };
   }
 
@@ -68,9 +65,16 @@ export class GHLIntegration {
     }
   }
 
-  async createOpportunity(opportunityData: GHLOpportunity): Promise<string | null> {
+  async createOpportunity(opportunityData: {
+    name: string;
+    pipelineId: string;
+    pipelineStageId: string;
+    contactId: string;
+    monetaryValue?: number;
+    notes?: string;
+  }): Promise<string | null> {
     try {
-      const response = await fetch(`${this.baseUrl}/pipelines/opportunities/`, {
+      const response = await fetch(`${this.baseUrl}/opportunities/`, {
         method: 'POST',
         headers: this.getHeaders(),
         body: JSON.stringify({
@@ -111,65 +115,117 @@ export class GHLIntegration {
     }
   }
 
-  async submitBusinessLead(formData: any): Promise<boolean> {
+  async submitPropertyLead(formData: any): Promise<boolean> {
     try {
-      // Create formatted notes with all form data
-      const formNotes = `Business Seller Lead - Form Submission Details:
-      
-Business Type: ${formData.businessType}
-Annual Revenue: ${formData.annualRevenue}
-Reason for Selling: ${formData.reasonForSelling}
-Timeline: ${formData.timeline}
-      
-Submitted: ${new Date().toLocaleString()}
-Lead ID: ${formData.leadId}
-Source: Business Acquisition Landing Page (/sell-your-business)`;
-
-      // Create contact first
       const contactId = await this.createContact({
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
         phone: formData.phone,
-        customField: {
-          businessType: formData.businessType,
-          annualRevenue: formData.annualRevenue,
-          reasonForSelling: formData.reasonForSelling,
-          timeline: formData.timeline,
-          leadId: formData.leadId,
-        },
-        tags: ['business-sellers', 'business-acquisition', 'web-lead', formData.reasonForSelling.toLowerCase().replace(/\s+/g, '-')],
-        notes: formNotes,
+        address1: formData.address,
+        tags: ['property-seller', 'web-lead', formData.timeframe?.toLowerCase().replace(/\s+/g, '-')].filter(Boolean),
+        source: 'Property Landing Page',
       });
 
       if (!contactId) {
         throw new Error('Failed to create contact in GHL');
       }
 
-      // Create opportunity
-      const opportunityName = `${formData.firstName} ${formData.lastName} - ${formData.businessType}`;
-      const opportunityId = await this.createOpportunity({
-        name: opportunityName,
-        pipelineId: this.pipelineId,
-        pipelineStageId: this.stageId,
-        contactId: contactId,
-        customFields: {
-          businessType: formData.businessType,
-          annualRevenue: formData.annualRevenue,
-          reasonForSelling: formData.reasonForSelling,
-          timeline: formData.timeline,
-          submittedAt: new Date().toISOString(),
-        },
-        notes: `Business Details:\n${formNotes}\n\nNext Steps: Schedule initial consultation call`,
-      });
+      // Add property details as a note
+      const noteBody = `Property Seller Lead - Form Submission Details:
 
-      if (!opportunityId) {
-        console.error('Failed to create opportunity, but contact was created');
+Address: ${formData.address}
+Property Condition: ${formData.propertyCondition}
+Timeframe: ${formData.timeframe}
+Asking Price: ${formData.price}
+
+First Name: ${formData.firstName}
+Last Name: ${formData.lastName}
+Email: ${formData.email}
+Phone: ${formData.phone}
+
+Submitted: ${new Date().toLocaleString()}
+Lead ID: ${formData.leadId}
+Source: Property Landing Page`;
+
+      await this.addNoteToContact(contactId, noteBody);
+
+      // Create opportunity if pipeline is configured
+      if (this.pipelineId && this.stageId) {
+        const opportunityName = `${formData.firstName} ${formData.lastName} - ${formData.address}`;
+        const opportunityId = await this.createOpportunity({
+          name: opportunityName,
+          pipelineId: this.pipelineId,
+          pipelineStageId: this.stageId,
+          contactId: contactId,
+          notes: noteBody,
+        });
+
+        if (!opportunityId) {
+          console.error('Failed to create opportunity, but contact was created');
+        }
       }
 
       return true;
     } catch (error) {
-      console.error('Error submitting to GHL:', error);
+      console.error('Error submitting property lead to GHL:', error);
+      return false;
+    }
+  }
+
+  async submitBusinessLead(formData: any): Promise<boolean> {
+    try {
+      const contactId = await this.createContact({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        tags: ['business-seller', 'business-acquisition', 'web-lead', formData.reasonForSelling?.toLowerCase().replace(/\s+/g, '-')].filter(Boolean),
+        source: 'Business Acquisition Landing Page',
+      });
+
+      if (!contactId) {
+        throw new Error('Failed to create contact in GHL');
+      }
+
+      // Add business details as a note
+      const noteBody = `Business Seller Lead - Form Submission Details:
+
+Business Type: ${formData.businessType}
+Annual Revenue: ${formData.annualRevenue}
+Reason for Selling: ${formData.reasonForSelling}
+Timeline: ${formData.timeline}
+
+First Name: ${formData.firstName}
+Last Name: ${formData.lastName}
+Email: ${formData.email}
+Phone: ${formData.phone}
+
+Submitted: ${new Date().toLocaleString()}
+Lead ID: ${formData.leadId}
+Source: Business Acquisition Landing Page (/sell-your-business)`;
+
+      await this.addNoteToContact(contactId, noteBody);
+
+      // Create opportunity if pipeline is configured
+      if (this.pipelineId && this.stageId) {
+        const opportunityName = `${formData.firstName} ${formData.lastName} - ${formData.businessType}`;
+        const opportunityId = await this.createOpportunity({
+          name: opportunityName,
+          pipelineId: this.pipelineId,
+          pipelineStageId: this.stageId,
+          contactId: contactId,
+          notes: `${noteBody}\n\nNext Steps: Schedule initial consultation call`,
+        });
+
+        if (!opportunityId) {
+          console.error('Failed to create opportunity, but contact was created');
+        }
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error submitting business lead to GHL:', error);
       return false;
     }
   }
