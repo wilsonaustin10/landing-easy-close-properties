@@ -123,7 +123,7 @@ export class GHLIntegration {
         email: formData.email,
         phone: formData.phone,
         address1: formData.address,
-        tags: ['property-seller', 'web-lead', formData.timeframe?.toLowerCase().replace(/\s+/g, '-')].filter(Boolean),
+        tags: ['Easy-Close-Properties', 'property-seller', 'web-lead', formData.timeframe?.toLowerCase().replace(/\s+/g, '-')].filter(Boolean),
         source: 'Property Landing Page',
       });
 
@@ -180,7 +180,7 @@ Source: Property Landing Page`;
         lastName: formData.lastName,
         email: formData.email,
         phone: formData.phone,
-        tags: ['business-seller', 'business-acquisition', 'web-lead', formData.reasonForSelling?.toLowerCase().replace(/\s+/g, '-')].filter(Boolean),
+        tags: ['Easy-Close-Properties', 'business-seller', 'business-acquisition', 'web-lead', formData.reasonForSelling?.toLowerCase().replace(/\s+/g, '-')].filter(Boolean),
         source: 'Business Acquisition Landing Page',
       });
 
