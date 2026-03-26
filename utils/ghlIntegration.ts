@@ -14,50 +14,72 @@ interface GHLNote {
   body: string;
 }
 
+function getGHLConfig() {
+  return {
+    apiKey: process.env.GHL_API_KEY || '',
+    locationId: process.env.GHL_LOCATION_ID || '',
+    pipelineId: process.env.GHL_PIPELINE_ID || '',
+    stageId: process.env.GHL_STAGE_ID || '',
+  };
+}
+
 export class GHLIntegration {
-  private apiKey: string;
-  private locationId: string;
-  private pipelineId: string;
-  private stageId: string;
   private baseUrl = 'https://services.leadconnectorhq.com';
 
-  constructor() {
-    this.apiKey = process.env.GHL_API_KEY || '';
-    this.locationId = process.env.GHL_LOCATION_ID || '';
-    this.pipelineId = process.env.GHL_PIPELINE_ID || '';
-    this.stageId = process.env.GHL_STAGE_ID || '';
-
-    if (!this.apiKey || !this.locationId) {
-      console.warn('GHL integration not properly configured');
+  private getConfig() {
+    const config = getGHLConfig();
+    if (!config.apiKey || !config.locationId) {
+      console.error('GHL integration not properly configured:', {
+        hasApiKey: !!config.apiKey,
+        hasLocationId: !!config.locationId,
+      });
     }
+    return config;
   }
 
   private getHeaders() {
+    const { apiKey } = this.getConfig();
     return {
-      'Authorization': `Bearer ${this.apiKey}`,
+      'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
       'Version': '2021-07-28',
     };
   }
 
   async createContact(contactData: GHLContact): Promise<string | null> {
+    const { locationId } = this.getConfig();
+    const payload = {
+      ...contactData,
+      locationId,
+    };
+
+    console.log('GHL createContact request:', {
+      url: `${this.baseUrl}/contacts/`,
+      locationId,
+      hasApiKey: !!this.getConfig().apiKey,
+      contactEmail: contactData.email,
+    });
+
     try {
       const response = await fetch(`${this.baseUrl}/contacts/`, {
         method: 'POST',
         headers: this.getHeaders(),
-        body: JSON.stringify({
-          ...contactData,
-          locationId: this.locationId,
-        }),
+        body: JSON.stringify(payload),
+      });
+
+      const responseText = await response.text();
+      console.log('GHL createContact response:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: responseText,
       });
 
       if (!response.ok) {
-        const error = await response.text();
-        console.error('Failed to create GHL contact:', error);
+        console.error('Failed to create GHL contact:', responseText);
         return null;
       }
 
-      const data = await response.json();
+      const data = JSON.parse(responseText);
       return data.contact?.id || null;
     } catch (error) {
       console.error('Error creating GHL contact:', error);
@@ -73,13 +95,14 @@ export class GHLIntegration {
     monetaryValue?: number;
     notes?: string;
   }): Promise<string | null> {
+    const { locationId } = this.getConfig();
     try {
       const response = await fetch(`${this.baseUrl}/opportunities/`, {
         method: 'POST',
         headers: this.getHeaders(),
         body: JSON.stringify({
           ...opportunityData,
-          locationId: this.locationId,
+          locationId,
         }),
       });
 
@@ -104,9 +127,13 @@ export class GHLIntegration {
         headers: this.getHeaders(),
         body: JSON.stringify({
           body: note,
-          userId: this.locationId,
         }),
       });
+
+      if (!response.ok) {
+        const error = await response.text();
+        console.error('Failed to add GHL note:', error);
+      }
 
       return response.ok;
     } catch (error) {
@@ -117,6 +144,8 @@ export class GHLIntegration {
 
   async submitPropertyLead(formData: any): Promise<boolean> {
     try {
+      console.log('GHL submitPropertyLead called for:', formData.email);
+
       const contactId = await this.createContact({
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -130,6 +159,8 @@ export class GHLIntegration {
       if (!contactId) {
         throw new Error('Failed to create contact in GHL');
       }
+
+      console.log('GHL contact created:', contactId);
 
       // Add property details as a note
       const noteBody = `Property Seller Lead - Form Submission Details:
@@ -151,12 +182,13 @@ Source: Property Landing Page`;
       await this.addNoteToContact(contactId, noteBody);
 
       // Create opportunity if pipeline is configured
-      if (this.pipelineId && this.stageId) {
+      const { pipelineId, stageId } = this.getConfig();
+      if (pipelineId && stageId) {
         const opportunityName = `${formData.firstName} ${formData.lastName} - ${formData.address}`;
         const opportunityId = await this.createOpportunity({
           name: opportunityName,
-          pipelineId: this.pipelineId,
-          pipelineStageId: this.stageId,
+          pipelineId,
+          pipelineStageId: stageId,
           contactId: contactId,
           notes: noteBody,
         });
@@ -175,6 +207,8 @@ Source: Property Landing Page`;
 
   async submitBusinessLead(formData: any): Promise<boolean> {
     try {
+      console.log('GHL submitBusinessLead called for:', formData.email);
+
       const contactId = await this.createContact({
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -187,6 +221,8 @@ Source: Property Landing Page`;
       if (!contactId) {
         throw new Error('Failed to create contact in GHL');
       }
+
+      console.log('GHL contact created:', contactId);
 
       // Add business details as a note
       const noteBody = `Business Seller Lead - Form Submission Details:
@@ -208,12 +244,13 @@ Source: Business Acquisition Landing Page (/sell-your-business)`;
       await this.addNoteToContact(contactId, noteBody);
 
       // Create opportunity if pipeline is configured
-      if (this.pipelineId && this.stageId) {
+      const { pipelineId, stageId } = this.getConfig();
+      if (pipelineId && stageId) {
         const opportunityName = `${formData.firstName} ${formData.lastName} - ${formData.businessType}`;
         const opportunityId = await this.createOpportunity({
           name: opportunityName,
-          pipelineId: this.pipelineId,
-          pipelineStageId: this.stageId,
+          pipelineId,
+          pipelineStageId: stageId,
           contactId: contactId,
           notes: `${noteBody}\n\nNext Steps: Schedule initial consultation call`,
         });
